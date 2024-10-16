@@ -1,4 +1,4 @@
-function OfferScreen(): JSX.Element {
+export default function OfferScreen(): JSX.Element {
   return (
     <div className="page">
       <header className="header">
@@ -335,5 +335,3 @@ function OfferScreen(): JSX.Element {
     </div>
   );
 }
-
-export default OfferScreen;

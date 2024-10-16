@@ -1,4 +1,4 @@
-import PlaceCard from '../../components/place-card/place-card';
+import PlaceCard from '@components/place-card/place-card';
 
 
 type MainScreenProps = {
@@ -6,7 +6,7 @@ type MainScreenProps = {
 }
 
 
-function MainScreen({placesCount}: MainScreenProps): JSX.Element {
+export default function MainScreen({placesCount}: MainScreenProps): JSX.Element {
   return (
     <div className="page page--gray page--main">
       <header className="header">
@@ -153,5 +153,3 @@ function MainScreen({placesCount}: MainScreenProps): JSX.Element {
     </div>
   );
 }
-
-export default MainScreen;

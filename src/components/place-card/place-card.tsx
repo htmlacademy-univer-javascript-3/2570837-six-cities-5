@@ -8,7 +8,7 @@ type PlaceCardProps = {
   isBookmarked: boolean;
 }
 
-function PlaceCard({ name, price, type, imgPath, isPremium, rating, isBookmarked }: PlaceCardProps): JSX.Element {
+export default function PlaceCard({ name, price, type, imgPath, isPremium, rating, isBookmarked }: PlaceCardProps): JSX.Element {
   return (
     <article className="cities__card place-card">
       {isPremium && (
@@ -48,5 +48,3 @@ function PlaceCard({ name, price, type, imgPath, isPremium, rating, isBookmarked
     </article>
   );
 }
-
-export default PlaceCard;
