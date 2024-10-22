@@ -1,4 +1,4 @@
-import PlaceCard from '../../components/place-card/place-card';
+import PlaceCard from '@components/place-card/place-card';
 
 
 type MainScreenProps = {
@@ -6,54 +6,7 @@ type MainScreenProps = {
 }
 
 
-function MainScreen({placesCount}: MainScreenProps): JSX.Element {
-  const places = [
-    {
-      name: 'Beautiful &amp; luxurious apartment at great location',
-      price: 120,
-      type: 'Apartment',
-      imgPath: 'img/apartment-01.jpg',
-      isPremium: true,
-      rating: 80,
-      isBookmarked: false,
-    },
-    {
-      name: 'Wood and stone place',
-      price: 80,
-      type: 'Room',
-      imgPath: 'img/room.jpg',
-      isPremium: false,
-      rating: 80,
-      isBookmarked: true,
-    },
-    {
-      name: 'Canal View Prinsengracht',
-      price: 132,
-      type: 'Apartment',
-      imgPath: 'img/apartment-02.jpg',
-      isPremium: false,
-      rating: 80,
-      isBookmarked: false,
-    },
-    {
-      name: 'Nice, cozy, warm big bed apartment',
-      price: 180,
-      type: 'Apartment',
-      imgPath: 'img/apartment-03.jpg',
-      isPremium: true,
-      rating: 100,
-      isBookmarked: false,
-    },
-    {
-      name: 'Wood and stone place',
-      price: 80,
-      type: 'Room',
-      imgPath: 'img/room.jpg',
-      isPremium: false,
-      rating: 80,
-      isBookmarked: true,
-    },
-  ];
+export default function MainScreen({placesCount}: MainScreenProps): JSX.Element {
   return (
     <div className="page page--gray page--main">
       <header className="header">
@@ -144,18 +97,51 @@ function MainScreen({placesCount}: MainScreenProps): JSX.Element {
                 </ul>
               </form>
               <div className="cities__places-list places__list tabs__content">
-                {places.map((place) => (
-                  <PlaceCard
-                    key={place.name}
-                    name={place.name}
-                    price={place.price}
-                    type={place.type}
-                    imgPath={place.imgPath}
-                    isPremium={place.isPremium}
-                    rating={place.rating}
-                    isBookmarked={place.isBookmarked}
-                  />
-                ))}
+                <PlaceCard
+                  name="Beautiful &amp; luxurious apartment at great location"
+                  price={120}
+                  type="Apartment"
+                  imgPath="img/apartment-01.jpg"
+                  isPremium
+                  rating={80}
+                  isBookmarked={false}
+                />
+                <PlaceCard
+                  name="Wood and stone place"
+                  price={80}
+                  type="Room"
+                  imgPath="img/room.jpg"
+                  isPremium={false}
+                  rating={80}
+                  isBookmarked
+                />
+                <PlaceCard
+                  name="Canal View Prinsengracht"
+                  price={132}
+                  type="Apartment"
+                  imgPath="img/apartment-02.jpg"
+                  isPremium={false}
+                  rating={80}
+                  isBookmarked={false}
+                />
+                <PlaceCard
+                  name="Nice, cozy, warm big bed apartment"
+                  price={180}
+                  type="Apartment"
+                  imgPath="img/apartment-03.jpg"
+                  isPremium
+                  rating={100}
+                  isBookmarked={false}
+                />
+                <PlaceCard
+                  name="Wood and stone place"
+                  price={80}
+                  type="Room"
+                  imgPath="img/room.jpg"
+                  isPremium={false}
+                  rating={80}
+                  isBookmarked
+                />
               </div>
             </section>
             <div className="cities__right-section">
@@ -167,5 +153,3 @@ function MainScreen({placesCount}: MainScreenProps): JSX.Element {
     </div>
   );
 }
-
-export default MainScreen;
