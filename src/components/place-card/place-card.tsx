@@ -1,49 +1,67 @@
+import { Offer } from '../../types/offer';
+import { Link } from 'react-router-dom';
+import {AppRoute} from '../../const';
+import { FullOffer } from 'src/types/fullOffer';
+
+
 type PlaceCardProps = {
-  name: string;
-  price: number;
-  type: string;
-  imgPath: string;
-  isPremium: boolean;
-  rating: number;
-  isBookmarked: boolean;
+  card: Offer | FullOffer;
+  onMouseEnter: () => void;
+  onMouseLeave: () => void;
 }
 
-export default function PlaceCard({ name, price, type, imgPath, isPremium, rating, isBookmarked }: PlaceCardProps): JSX.Element {
+export default function PlaceCard({ card, onMouseEnter, onMouseLeave }: PlaceCardProps): JSX.Element {
   return (
-    <article className="cities__card place-card">
-      {isPremium && (
+    <article className="cities__card place-card"
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+    >
+      {card.isPremium && (
         <div className="place-card__mark">
           <span>Premium</span>
         </div>
       )}
       <div className="cities__image-wrapper place-card__image-wrapper">
-        <a href="#">
-          <img className="place-card__image" src={imgPath} width="260" height="200" alt="Place image"/>
-        </a>
+        {
+          'images' in card ? (
+            card.images.map((image) => (
+              <Link key={image} to={`${AppRoute.Offer}/${card.id}`}>
+                <img className="place-card__image" src={image} width={260} height={200} alt="Place image"/>
+              </Link>
+            ))
+          ) : (
+            <Link to={`${AppRoute.Offer}/${card.id}`}>
+              <img className="place-card__image" src={card.imgPath} width={260} height={200} alt="Place image"/>
+            </Link>
+          )
+        }
       </div>
       <div className="place-card__info">
         <div className="place-card__price-wrapper">
           <div className="place-card__price">
-            <b className="place-card__price-value">&euro;{price}</b>
+            <b className="place-card__price-value">&euro;{card.price}</b>
             <span className="place-card__price-text">&#47;&nbsp;night</span>
           </div>
-          <button className="place-card__bookmark-button button" type="button">
+          <button
+            className={`place-card__bookmark-button ${card.isBookmarked ? 'place-card__bookmark-button--active' : ''} button`}
+            type="button"
+          >
             <svg className="place-card__bookmark-icon" width="18" height="19">
               <use xlinkHref="#icon-bookmark"></use>
             </svg>
-            <span className="visually-hidden">{isBookmarked ? 'In bookmarks' : 'To bookmarks'}</span>
+            <span className="visually-hidden">{card.isBookmarked ? 'In bookmarks' : 'To bookmarks'}</span>
           </button>
         </div>
         <div className="place-card__rating rating">
           <div className="place-card__stars rating__stars">
-            <span style={{ width: `${rating}%` }}></span>
+            <span style={{ width: `calc(20% * ${card.starsCount})`}}></span>
             <span className="visually-hidden">Rating</span>
           </div>
         </div>
         <h2 className="place-card__name">
-          <a href="#">{name}</a>
+          <Link to={`${AppRoute.Offer}/${card.id}`}>{card.title}</Link>
         </h2>
-        <p className="place-card__type">{type}</p>
+        <p className="place-card__type">{card.type}</p>
       </div>
     </article>
   );
