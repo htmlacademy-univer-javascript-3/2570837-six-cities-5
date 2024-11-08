@@ -3,7 +3,6 @@ import { Helmet } from 'react-helmet-async';
 import Header from '@components/header/header';
 import OfferList from '@components/offer-list/offer-list';
 import Map from '@components/map/map';
-import { useState } from 'react';
 
 
 type MainScreenProps = {
@@ -13,10 +12,6 @@ type MainScreenProps = {
 
 
 export default function MainScreen({placesCount, offers}: MainScreenProps): JSX.Element {
-  const [activeOfferId, setActiveOfferId] = useState<string | null>(null);
-
-  const selectedOffer = offers.find((offer) => offer.id === activeOfferId);
-
   return (
     <div className="page page--gray page--main">
       <Helmet>
@@ -82,12 +77,12 @@ export default function MainScreen({placesCount, offers}: MainScreenProps): JSX.
                   <li className="places__option" tabIndex={0}>Top rated first</li>
                 </ul>
               </form>
-              <OfferList offers={offers} onActiveOfferChange={setActiveOfferId}/>
+              <OfferList offers={offers}/>
             </section>
             <div className="cities__right-section">
               <Map
                 offers={offers}
-                selectedOffer={selectedOffer}
+                selectedOffer={offers[0]}
               />
             </div>
           </div>
