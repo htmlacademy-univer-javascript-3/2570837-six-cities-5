@@ -48,7 +48,10 @@ export default function FavoritesScreen ({ offers } : FavoritesScreenProps): JSX
                       </div>
                     </div>
                     <div className="favorites__places">
-                      <OfferList offers={cityOffers}/>
+                      <OfferList
+                        pageKeyWords={'favorites'}
+                        offers={cityOffers}
+                      />
                     </div>
                   </li>
                 ))}

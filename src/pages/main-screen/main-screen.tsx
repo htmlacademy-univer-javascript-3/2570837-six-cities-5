@@ -77,12 +77,15 @@ export default function MainScreen({placesCount, offers}: MainScreenProps): JSX.
                   <li className="places__option" tabIndex={0}>Top rated first</li>
                 </ul>
               </form>
-              <OfferList offers={offers}/>
+              <OfferList
+                pageKeyWords={'cities'}
+                offers={offers}
+              />
             </section>
             <div className="cities__right-section">
               <Map
                 offers={offers}
-                selectedOffer={offers[0]}
+                selectedOffer={undefined}
               />
             </div>
           </div>

@@ -1,18 +1,18 @@
 import { Offer } from '../../types/offer';
 import { Link } from 'react-router-dom';
 import {AppRoute} from '../../const';
-import { FullOffer } from 'src/types/fullOffer';
 
 
 type PlaceCardProps = {
-  card: Offer | FullOffer;
+  pageKeyWords: string;
+  card: Offer;
   onMouseEnter: () => void;
   onMouseLeave: () => void;
 }
 
-export default function PlaceCard({ card, onMouseEnter, onMouseLeave }: PlaceCardProps): JSX.Element {
+export default function PlaceCard({ pageKeyWords, card, onMouseEnter, onMouseLeave }: PlaceCardProps): JSX.Element {
   return (
-    <article className="cities__card place-card"
+    <article className={`${pageKeyWords}__card place-card`}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
@@ -21,19 +21,11 @@ export default function PlaceCard({ card, onMouseEnter, onMouseLeave }: PlaceCar
           <span>Premium</span>
         </div>
       )}
-      <div className="cities__image-wrapper place-card__image-wrapper">
+      <div className={`${pageKeyWords}__image-wrapper place-card__image-wrapper`}>
         {
-          'images' in card ? (
-            card.images.map((image) => (
-              <Link key={image} to={`${AppRoute.Offer}/${card.id}`}>
-                <img className="place-card__image" src={image} width={260} height={200} alt="Place image"/>
-              </Link>
-            ))
-          ) : (
-            <Link to={`${AppRoute.Offer}/${card.id}`}>
-              <img className="place-card__image" src={card.imgPath} width={260} height={200} alt="Place image"/>
-            </Link>
-          )
+          <Link to={`${AppRoute.Offer}/${card.id}`}>
+            <img className="place-card__image" src={card.imgPath} width={260} height={200} alt="Place image"/>
+          </Link>
         }
       </div>
       <div className="place-card__info">
