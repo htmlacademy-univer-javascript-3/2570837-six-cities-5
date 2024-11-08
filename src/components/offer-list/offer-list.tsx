@@ -1,13 +1,13 @@
 import { Offers } from '../../types/offer';
 import { useState, useCallback } from 'react';
 import PlaceCard from '@components/place-card/place-card';
-import { FullOffers } from 'src/types/fullOffer';
 
 type OfferListProps = {
-  offers: Offers | FullOffers;
+  pageKeyWords: string;
+  offers: Offers;
 };
 
-export default function OffersList({ offers }: OfferListProps): JSX.Element {
+export default function OffersList({ pageKeyWords, offers }: OfferListProps): JSX.Element {
   const [ , setActiveOfferId] = useState<string | null>(null);
 
   const handleMouseEnter = useCallback((offerId: string) => {
@@ -19,10 +19,11 @@ export default function OffersList({ offers }: OfferListProps): JSX.Element {
   }, []);
 
   return (
-    <div className="cities__places-list places__list tabs__content">
+    <div className={`${pageKeyWords}__places-list places__list tabs__content`}>
       {offers.map((offer) => (
         <PlaceCard
           key={offer.id}
+          pageKeyWords={pageKeyWords}
           card={offer}
           onMouseEnter={() => handleMouseEnter(offer.id)}
           onMouseLeave={handleMouseLeave}

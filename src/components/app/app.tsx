@@ -43,7 +43,7 @@ export function App({placesCount, offers, fullOffers, reviews}: AppProps): JSX.E
           />
           <Route
             path={AppRoute.Offer}
-            element={<OfferScreen fullOffers={fullOffers} reviews={reviews}/>}
+            element={<OfferScreen offers={offers} fullOffers={fullOffers} reviews={reviews}/>}
           />
           <Route
             path="*"
