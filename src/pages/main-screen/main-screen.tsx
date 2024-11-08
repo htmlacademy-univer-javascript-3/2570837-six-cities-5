@@ -1,12 +1,13 @@
-import {Offer} from '../../types/offer';
+import {Offers} from '../../types/offer';
 import { Helmet } from 'react-helmet-async';
-import Header from '../../components/header/header';
-import OfferList from '../../components/offer-list/offer-list';
+import Header from '@components/header/header';
+import OfferList from '@components/offer-list/offer-list';
+import Map from '@components/map/map';
 
 
 type MainScreenProps = {
     placesCount: number;
-    offers: Offer[];
+    offers: Offers;
 }
 
 
@@ -79,7 +80,10 @@ export default function MainScreen({placesCount, offers}: MainScreenProps): JSX.
               <OfferList offers={offers}/>
             </section>
             <div className="cities__right-section">
-              <section className="cities__map map"></section>
+              <Map
+                offers={offers}
+                selectedOffer={offers[0]}
+              />
             </div>
           </div>
         </div>

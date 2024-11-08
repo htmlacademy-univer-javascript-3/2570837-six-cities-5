@@ -19,8 +19,8 @@ export const offers: Offers = [
       }
     },
     'location': {
-      'latitude': 52.36554,
-      'longitude': 4.911976,
+      'latitude': 52.3909553943508,
+      'longitude': 4.85309666406198,
       'zoom': 16
     },
   },
@@ -42,8 +42,8 @@ export const offers: Offers = [
       }
     },
     'location': {
-      'latitude': 52.370540000000005,
-      'longitude': 4.9099759999999995,
+      'latitude': 52.3609553943508,
+      'longitude': 4.85309666406198,
       'zoom': 16
     },
   },
@@ -65,8 +65,8 @@ export const offers: Offers = [
       }
     },
     'location': {
-      'latitude': 52.36354,
-      'longitude': 4.911976,
+      'latitude': 52.3909553943508,
+      'longitude': 4.929309666406198,
       'zoom': 16
     },
   },
@@ -88,8 +88,8 @@ export const offers: Offers = [
       }
     },
     'location': {
-      'latitude': 52.385540000000006,
-      'longitude': 4.886976,
+      'latitude': 52.3809553943508,
+      'longitude': 4.939309666406198,
       'zoom': 16
     },
   },
