@@ -2,7 +2,7 @@ import { Reviews } from '../types/review';
 
 export const reviews: Reviews = [
   {
-    id: 1,
+    id: 'e50c65bc-1822-4ae8-9807-bb050b84e4bb',
     date: '2024-09-09T18:00:07.0Z',
     user: {
       name: 'Max',
@@ -13,7 +13,7 @@ export const reviews: Reviews = [
     starsCount: 4,
   },
   {
-    id: 2,
+    id: 'e50c65bc-1822-4ae8-9807-bb050b84e5ee',
     date: '2024-10-02T09:30:15.0Z',
     user: {
       name: 'Max',

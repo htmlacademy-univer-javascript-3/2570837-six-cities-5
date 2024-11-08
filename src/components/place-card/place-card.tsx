@@ -22,9 +22,19 @@ export default function PlaceCard({ card, onMouseEnter, onMouseLeave }: PlaceCar
         </div>
       )}
       <div className="cities__image-wrapper place-card__image-wrapper">
-        <Link to={`${AppRoute.Offer}/${card.id}`}>
-          <img className="place-card__image" src={card.imgPath} width="260" height="200" alt="Place image"/>
-        </Link>
+        {
+          'images' in card ? (
+            card.images.map((image) => (
+              <Link key={image} to={`${AppRoute.Offer}/${card.id}`}>
+                <img className="place-card__image" src={image} width={260} height={200} alt="Place image"/>
+              </Link>
+            ))
+          ) : (
+            <Link to={`${AppRoute.Offer}/${card.id}`}>
+              <img className="place-card__image" src={card.imgPath} width={260} height={200} alt="Place image"/>
+            </Link>
+          )
+        }
       </div>
       <div className="place-card__info">
         <div className="place-card__price-wrapper">
