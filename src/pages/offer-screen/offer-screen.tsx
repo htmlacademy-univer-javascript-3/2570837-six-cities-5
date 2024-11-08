@@ -4,7 +4,7 @@ import OfferList from '@components/offer-list/offer-list';
 import {FullOffers} from '../../types/fullOffer';
 import {Reviews} from '../../types/review';
 import { useParams } from 'react-router-dom';
-import ReviewForm from '@components/comment-form/comment-form';
+import ReviewForm from '@components/review-form/review-form';
 import NotFoundScreen from '@pages/not-found-screen/not-found-screen';
 
 type OfferScreenProps = {
