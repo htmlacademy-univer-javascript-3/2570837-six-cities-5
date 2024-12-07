@@ -1,11 +1,12 @@
 import { createReducer } from '@reduxjs/toolkit';
-import { setOffersList, changeCity, setReviews, setFullOffers } from './action';
+import { setOffersList, changeCity, setReviews, setFullOffers, setSortOption } from './action';
 import { Offers } from '../types/offer';
 import { Reviews } from '../types/review';
 import { FullOffers } from '../types/fullOffer';
 import { offers } from '@mocks/offers';
 import { reviews } from '@mocks/reviews';
 import { fullOffers } from '@mocks/fullOffers';
+import { SortOptions } from '@const';
 
 
 type StateType = {
@@ -13,13 +14,15 @@ type StateType = {
   offersList: Offers;
   reviews: Reviews;
   fullOffers: FullOffers;
+  sortOption: SortOptions;
 };
 
 const initialState: StateType = {
-  city: 'Paris',
+  city: 'Amsterdam',
   offersList: [],
   reviews: [],
-  fullOffers: []
+  fullOffers: [],
+  sortOption: SortOptions.Popular,
 };
 
 export const reducer = createReducer(initialState, (builder) => {
@@ -35,5 +38,8 @@ export const reducer = createReducer(initialState, (builder) => {
     })
     .addCase(setFullOffers, (state) => {
       state.fullOffers = fullOffers;
+    })
+    .addCase(setSortOption, (state, { payload }) => {
+      state.sortOption = payload;
     });
 });
