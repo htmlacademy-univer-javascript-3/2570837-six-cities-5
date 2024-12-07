@@ -2,13 +2,12 @@ import { Offer } from '../../types/offer';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 import Header from '../../components/header/header';
-import OfferList from '../../components/offer-list/offer-list';
+import PlaceCard from '@components/place-card/place-card';
+import { useAppSelector } from '@hooks/index';
 
-type FavoritesScreenProps = {
-  offers: Offer[];
-}
 
-export default function FavoritesScreen ({ offers } : FavoritesScreenProps): JSX.Element{
+export default function FavoritesScreen(): JSX.Element {
+  const offers = useAppSelector((state) => state.offersList);
   const favorites = offers.filter((offer) => offer.isBookmarked);
   const groupedFavorites = favorites.reduce<{ [city: string]: Offer[] }>((acc, offer) => {
     const city = offer.city.name;
@@ -20,7 +19,7 @@ export default function FavoritesScreen ({ offers } : FavoritesScreenProps): JSX
       <Helmet>
         <title>Favorites</title>
       </Helmet>
-      <Header favoritesCount={favorites.length}/>
+      <Header favoritesCount={favorites.length} />
 
       <main className="page__main page__main--favorites">
         <div className="page__favorites-container container">
@@ -30,7 +29,7 @@ export default function FavoritesScreen ({ offers } : FavoritesScreenProps): JSX
               <div className="favorites__status-wrapper">
                 <b className="favorites__status">Nothing yet saved.</b>
                 <p className="favorites__status-description">
-                    Save properties to narrow down search results.
+                  Save properties to narrow down search results.
                 </p>
               </div>
             </section>
@@ -48,10 +47,15 @@ export default function FavoritesScreen ({ offers } : FavoritesScreenProps): JSX
                       </div>
                     </div>
                     <div className="favorites__places">
-                      <OfferList
-                        pageKeyWords={'favorites'}
-                        offers={cityOffers}
-                      />
+                      {cityOffers.map((offer) => (
+                        <PlaceCard
+                          key={offer.id}
+                          pageKeyWords={'favorites'}
+                          card={offer}
+                          onMouseEnter={() => { }}
+                          onMouseLeave={() => { }}
+                        />
+                      ))}
                     </div>
                   </li>
                 ))}

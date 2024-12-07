@@ -16,7 +16,11 @@ export default defineConfig({
   resolve: {
     alias: {
       '@components': `${path.resolve(__dirname, 'src')}/components`,
-      '@pages': `${path.resolve(__dirname, 'src')}/pages`
+      '@pages': `${path.resolve(__dirname, 'src')}/pages`,
+      '@const': `${path.resolve(__dirname, 'src')}/const`,
+      '@mocks': `${path.resolve(__dirname, 'src')}/mocks`,
+      '@hooks': `${path.resolve(__dirname, 'src')}/hooks`,
+      '@store': `${path.resolve(__dirname, 'src')}/store`,
     }
   }
 });
