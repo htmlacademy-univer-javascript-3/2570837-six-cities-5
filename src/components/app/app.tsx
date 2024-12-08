@@ -39,14 +39,14 @@ export default function App(): JSX.Element {
             path={AppRoute.Favorites}
             element={
               <PrivateRoute
-                authorizationStatus={AuthorizationStatus.Auth}
+                authorizationStatus={authorizationStatus}
               >
                 <FavoritesScreen />
               </PrivateRoute>
             }
           />
           <Route
-            path={`${AppRoute.Offer}/:id`}
+            path={AppRoute.Offer}
             element={<OfferScreen />}
           />
           <Route
