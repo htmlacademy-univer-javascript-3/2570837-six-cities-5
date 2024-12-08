@@ -1,5 +1,5 @@
 import { createReducer } from '@reduxjs/toolkit';
-import { setOffersList, changeCity, setReviews, setFullOffers, setSortOption, setError, setOffersDataLoadingStatus, setAuthorizationStatus } from './action';
+import { setOffersList, changeCity, setReviews, setFullOffers, setSortOption, setError, setOffersDataLoadingStatus, setAuthorizationStatus, setUserEmail } from './action';
 import { Offers } from '../types/offer';
 import { Reviews } from '../types/review';
 import { FullOffers } from '../types/fullOffer';
@@ -15,6 +15,7 @@ type StateType = {
   authorizationStatus: AuthorizationStatus;
   error: string | null;
   isOffersDataLoading: boolean;
+  userEmail: string;
 };
 
 const initialState: StateType = {
@@ -26,6 +27,7 @@ const initialState: StateType = {
   authorizationStatus: AuthorizationStatus.Unknown,
   isOffersDataLoading: false,
   error: null,
+  userEmail: '',
 };
 
 export const reducer = createReducer(initialState, (builder) => {
@@ -53,5 +55,8 @@ export const reducer = createReducer(initialState, (builder) => {
     })
     .addCase(setOffersDataLoadingStatus, (state, action) => {
       state.isOffersDataLoading = action.payload;
+    })
+    .addCase(setUserEmail, (state, { payload }) => {
+      state.userEmail = payload;
     });
 });

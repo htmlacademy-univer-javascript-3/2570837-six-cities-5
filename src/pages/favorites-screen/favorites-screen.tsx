@@ -19,7 +19,7 @@ export default function FavoritesScreen(): JSX.Element {
       <Helmet>
         <title>Favorites</title>
       </Helmet>
-      <Header favoritesCount={favorites.length} />
+      <Header />
 
       <main className="page__main page__main--favorites">
         <div className="page__favorites-container container">

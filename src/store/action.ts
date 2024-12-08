@@ -11,5 +11,6 @@ export const setFullOffers = createAction<FullOffers>('offers/setFullOffers');
 export const changeCity = createAction<string>('city/changeCity');
 export const setSortOption = createAction<SortOptions>('setSortOption');
 export const setAuthorizationStatus = createAction<AuthorizationStatus>('auth/setStatus');
-export const setError = createAction<string | null>('error/set');
+export const setError = createAction<string | null>('setError');
+export const setUserEmail = createAction<string>('setUserEmail');
 export const setOffersDataLoadingStatus = createAction<boolean>('setOffersDataLoadingStatus');
