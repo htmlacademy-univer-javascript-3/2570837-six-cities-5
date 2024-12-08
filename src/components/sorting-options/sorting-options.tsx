@@ -1,11 +1,11 @@
-import { useCallback, useState } from 'react';
+import { memo, useCallback, useState } from 'react';
 import { SortOptions } from '@const';
 
 type SortOptionsProps = {
   onSortChange: (option: SortOptions) => void;
 };
 
-export default function SortingOptions({ onSortChange }: SortOptionsProps): JSX.Element {
+function SortingOptions({ onSortChange }: SortOptionsProps): JSX.Element {
   const [selectedOption, setSelectedOption] = useState(SortOptions.Popular);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -47,3 +47,6 @@ export default function SortingOptions({ onSortChange }: SortOptionsProps): JSX.
     </form>
   );
 }
+
+const MemoizedSortingOptions = memo(SortingOptions);
+export default MemoizedSortingOptions;

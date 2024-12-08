@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useMemo, memo } from 'react';
 import { Icon, Marker, layerGroup } from 'leaflet';
 import useMap from '../../hooks/use-map';
 import { Offer, Offers } from '../../types/offer';
@@ -23,14 +23,16 @@ const currentMarkerIcon = new Icon({
   iconAnchor: [20, 40]
 });
 
-export default function Map({ offers, selectedOffer, className }: MapProps): JSX.Element {
+function Map({ offers, selectedOffer, className }: MapProps): JSX.Element {
 
   const mapRef = useRef(null);
   const map = useMap(mapRef, offers[0].city);
 
+  const markerLayer = useMemo(() => layerGroup(), []);
+
   useEffect(() => {
     if (map) {
-      const markerLayer = layerGroup().addTo(map);
+      markerLayer.clearLayers();
       offers.forEach((offer) => {
         if (offer && offer.location) {
           const marker = new Marker({
@@ -47,6 +49,7 @@ export default function Map({ offers, selectedOffer, className }: MapProps): JSX
         }
       });
 
+      markerLayer.addTo(map);
       return () => {
         map.removeLayer(markerLayer);
       };
@@ -55,3 +58,10 @@ export default function Map({ offers, selectedOffer, className }: MapProps): JSX
 
   return <section className={className} style={{ height: '500px' }} ref={mapRef}></section>;
 }
+
+const MemoizedMap = memo(Map, (prevProps, nextProps) =>
+  prevProps.selectedOffer?.id === nextProps.selectedOffer?.id &&
+  prevProps.offers.map((offer) => offer.id).join() === nextProps.offers.map((offer) => offer.id).join()
+);
+
+export default MemoizedMap;

@@ -1,10 +1,11 @@
 import { Review } from '../../types/review';
+import { memo } from 'react';
 
 type ReviewItemProps = {
   review: Review;
 }
 
-export default function ReviewItem({review}:ReviewItemProps): JSX.Element{
+function ReviewItem({ review }: ReviewItemProps): JSX.Element {
   return (
     <li key={review.id} className="reviews__item">
       <div className="reviews__user user">
@@ -35,3 +36,6 @@ export default function ReviewItem({review}:ReviewItemProps): JSX.Element{
     </li>
   );
 }
+
+const MemoizedReviewItem = memo(ReviewItem);
+export default MemoizedReviewItem;

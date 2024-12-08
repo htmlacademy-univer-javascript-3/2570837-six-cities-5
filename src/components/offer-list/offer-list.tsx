@@ -1,5 +1,5 @@
 import { Offers } from '../../types/offer';
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, memo } from 'react';
 import PlaceCard from '@components/place-card/place-card';
 
 type OfferListProps = {
@@ -8,7 +8,7 @@ type OfferListProps = {
   onActiveOfferChange: (offerId: string | null) => void;
 };
 
-export default function OffersList({ pageKeyWords, offers, onActiveOfferChange }: OfferListProps): JSX.Element {
+function OffersList({ pageKeyWords, offers, onActiveOfferChange }: OfferListProps): JSX.Element {
   const [activeOfferId, setActiveOfferId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -37,3 +37,6 @@ export default function OffersList({ pageKeyWords, offers, onActiveOfferChange }
     </div>
   );
 }
+
+const MemoizedOffersList = memo(OffersList);
+export default MemoizedOffersList;

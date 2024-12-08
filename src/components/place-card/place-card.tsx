@@ -1,6 +1,7 @@
 import { Offer } from '../../types/offer';
 import { Link } from 'react-router-dom';
-import {AppRoute} from '../../const';
+import { AppRoute } from '../../const';
+import { memo } from 'react';
 
 
 type PlaceCardProps = {
@@ -10,7 +11,7 @@ type PlaceCardProps = {
   onMouseLeave: () => void;
 }
 
-export default function PlaceCard({ pageKeyWords, card, onMouseEnter, onMouseLeave }: PlaceCardProps): JSX.Element {
+function PlaceCard({ pageKeyWords, card, onMouseEnter, onMouseLeave }: PlaceCardProps): JSX.Element {
   return (
     <article className={`${pageKeyWords}__card place-card`}
       onMouseEnter={onMouseEnter}
@@ -24,7 +25,7 @@ export default function PlaceCard({ pageKeyWords, card, onMouseEnter, onMouseLea
       <div className={`${pageKeyWords}__image-wrapper place-card__image-wrapper`}>
         {
           <Link to={`${AppRoute.Offer}/${card.id}`}>
-            <img className="place-card__image" src={card.imgPath} width={260} height={200} alt="Place image"/>
+            <img className="place-card__image" src={card.imgPath} width={260} height={200} alt="Place image" />
           </Link>
         }
       </div>
@@ -46,7 +47,7 @@ export default function PlaceCard({ pageKeyWords, card, onMouseEnter, onMouseLea
         </div>
         <div className="place-card__rating rating">
           <div className="place-card__stars rating__stars">
-            <span style={{ width: `calc(20% * ${card.starsCount})`}}></span>
+            <span style={{ width: `calc(20% * ${card.starsCount})` }}></span>
             <span className="visually-hidden">Rating</span>
           </div>
         </div>
@@ -58,3 +59,7 @@ export default function PlaceCard({ pageKeyWords, card, onMouseEnter, onMouseLea
     </article>
   );
 }
+
+const MemoizedPlaceCard = memo(PlaceCard);
+
+export default MemoizedPlaceCard;
