@@ -1,18 +1,25 @@
 import ReviewItem from '@components/review-item/review-item';
 import { Reviews } from '../../types/review';
+import { useMemo, memo } from 'react';
 
 type ReviewsListProps = {
   reviews: Reviews | undefined;
 };
 
-export default function ReviewList({ reviews }: ReviewsListProps): JSX.Element {
-  if (!reviews) {
+function ReviewList({ reviews }: ReviewsListProps): JSX.Element {
+  const sortedReviews = useMemo(() => {
+    if (!reviews) {
+      return [];
+    }
+
+    return [...reviews]
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+      .slice(0, 10);
+  }, [reviews]);
+
+  if (!reviews || sortedReviews.length === 0) {
     return <p style={{ textAlign: 'center', fontSize: '32px' }}>Leave first review</p>;
   }
-
-  const sortedReviews = [...reviews]
-    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-    .slice(0, 10);
 
   return (
     <ul className="reviews__list">
@@ -22,3 +29,6 @@ export default function ReviewList({ reviews }: ReviewsListProps): JSX.Element {
     </ul>
   );
 }
+
+const MemoizedReviewsList = memo(ReviewList);
+export default MemoizedReviewsList;

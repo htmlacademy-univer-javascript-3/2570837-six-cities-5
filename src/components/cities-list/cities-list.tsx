@@ -1,16 +1,20 @@
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { changeCity } from '../../store/action.ts';
+import { memo, useCallback } from 'react';
 
 type CitiesListProps = {
   cities: string[];
 };
 
-export default function CitiesList({ cities }: CitiesListProps): JSX.Element {
+function CitiesList({ cities }: CitiesListProps): JSX.Element {
   const dispatch = useAppDispatch();
   const selectedCity = useAppSelector((state) => state.city);
-  const handleCityChange = (city: string) => {
-    dispatch(changeCity(city));
-  };
+  const handleCityChange = useCallback(
+    (city: string) => {
+      dispatch(changeCity(city));
+    },
+    [dispatch]
+  );
 
 
   return (
@@ -29,3 +33,6 @@ export default function CitiesList({ cities }: CitiesListProps): JSX.Element {
     </ul>
   );
 }
+const MemoizedCitiesList = memo(CitiesList);
+export default MemoizedCitiesList;
+

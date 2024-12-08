@@ -1,9 +1,8 @@
-import { Offers } from '../../types/offer';
 import { Helmet } from 'react-helmet-async';
 import Header from '@components/header/header';
 import OfferList from '@components/offer-list/offer-list';
 import Map from '@components/map/map';
-import { useState, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import CitiesList from '@components/cities-list/cities-list';
 import { Cities, SortOptions } from '@const';
 import { useAppSelector, useAppDispatch } from '@hooks/index';
@@ -16,29 +15,25 @@ export default function MainScreen(): JSX.Element {
   const city = useAppSelector((state) => state.city);
   const sortOption = useAppSelector((state) => state.sortOption);
   const dispatch = useAppDispatch();
-
-  const [currentCityOffers, setCurrentCityOffers] = useState<Offers>(offers);
   const [activeOfferId, setActiveOfferId] = useState<string | null>(null);
 
-  useEffect(() => {
+  const currentCityOffers = useMemo(() => {
     const filteredOffers = offers.filter((offer) => offer.city.name === city);
-    switch (sortOption) {
-      case SortOptions.PriceLowToHigh:
-        filteredOffers.sort((a, b) => a.price - b.price);
-        break;
-      case SortOptions.PriceHighToLow:
-        filteredOffers.sort((a, b) => b.price - a.price);
-        break;
-      case SortOptions.TopRated:
-        filteredOffers.sort((a, b) => b.starsCount - a.starsCount);
-        break;
-      default:
-        break;
-    }
-    setCurrentCityOffers(filteredOffers);
+    return [...filteredOffers].sort((a, b) => {
+      switch (sortOption) {
+        case SortOptions.PriceLowToHigh:
+          return a.price - b.price;
+        case SortOptions.PriceHighToLow:
+          return b.price - a.price;
+        case SortOptions.TopRated:
+          return b.starsCount - a.starsCount;
+        default:
+          return 0;
+      }
+    });
   }, [city, offers, sortOption]);
 
-  const selectedOffer = offers.find((offer) => offer.id === activeOfferId);
+  const selectedOffer = useMemo(() => offers.find((offer) => offer.id === activeOfferId), [activeOfferId, offers]);
 
   const handleSortChange = (option: SortOptions) => {
     dispatch(setSortOption(option));

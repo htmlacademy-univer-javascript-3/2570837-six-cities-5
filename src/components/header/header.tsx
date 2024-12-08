@@ -1,18 +1,21 @@
 import { Link } from 'react-router-dom';
 import { AppRoute, AuthorizationStatus } from '@const';
 import { useAppDispatch, useAppSelector } from '@hooks/index';
-import { logoutAction } from '@store/api-actions';
+import { logoutAction, } from '@store/api-actions';
+import { memo, useCallback } from 'react';
 
 
-export default function Header(): JSX.Element {
+function Header(): JSX.Element {
   const dispatch = useAppDispatch();
   const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
   const userEmail = useAppSelector((state) => state.userEmail);
   const favoritesCount = useAppSelector((state) =>
     state.offersList.filter((offer) => offer.isBookmarked).length);
-  const handleSignOut = () => {
+
+  const handleSignOut = useCallback(() => {
     dispatch(logoutAction());
-  };
+  }, [dispatch]);
+
   const isLoginScreen = location.pathname.startsWith(AppRoute.Login);
 
   return (
@@ -60,3 +63,6 @@ export default function Header(): JSX.Element {
     </header >
   );
 }
+
+const MemoizedHeader = memo(Header);
+export default MemoizedHeader;

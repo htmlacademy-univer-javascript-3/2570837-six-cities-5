@@ -4,16 +4,24 @@ import { Link } from 'react-router-dom';
 import Header from '../../components/header/header';
 import PlaceCard from '@components/place-card/place-card';
 import { useAppSelector } from '@hooks/index';
+import { memo, useMemo } from 'react';
 
 
-export default function FavoritesScreen(): JSX.Element {
+function FavoritesScreen(): JSX.Element {
   const offers = useAppSelector((state) => state.offersList);
-  const favorites = offers.filter((offer) => offer.isBookmarked);
-  const groupedFavorites = favorites.reduce<{ [city: string]: Offer[] }>((acc, offer) => {
-    const city = offer.city.name;
-    (acc[city] = acc[city] || []).push(offer);
-    return acc;
-  }, {});
+  const favorites = useMemo(() => offers.filter((offer) => offer.isBookmarked), [offers]);
+
+  const groupedFavorites = useMemo(
+    () =>
+      favorites.reduce<{ [city: string]: Offer[] }>((acc, offer) => {
+        const city = offer.city.name;
+        (acc[city] = acc[city] || []).push(offer);
+        return acc;
+      }, {}),
+    [favorites]
+  );
+
+
   return (
     <div className="page">
       <Helmet>
@@ -72,3 +80,6 @@ export default function FavoritesScreen(): JSX.Element {
     </div>
   );
 }
+
+const MemoizedFavoritesScreen = memo(FavoritesScreen);
+export default MemoizedFavoritesScreen;
