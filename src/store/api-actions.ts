@@ -1,8 +1,8 @@
 import {AxiosInstance} from 'axios';
 import {createAsyncThunk} from '@reduxjs/toolkit';
 import { AppDispatch, State } from '../types/state';
-import { Offers } from '../types/offer';
-import { setOffersList, setAuthorizationStatus, setOffersDataLoadingStatus, setError, setUserEmail } from '@store/action';
+import { Offers, Offer } from '../types/offer';
+import { setOffersList, setAuthorizationStatus, setOffersDataLoadingStatus, setError, setUserEmail, setFavoriteOffers, addFavoriteOffer, removeFavoriteOffer } from '@store/action';
 import {saveToken, dropToken} from '@services/token';
 import {APIRoute, AuthorizationStatus, TIMEOUT_SHOW_ERROR} from '@const';
 import {AuthData} from '../types/auth-data';
@@ -73,5 +73,34 @@ export const logoutAction = createAsyncThunk<void, undefined, {
     await api.delete(APIRoute.Logout);
     dropToken();
     dispatch(setAuthorizationStatus(AuthorizationStatus.NoAuth));
+  },
+);
+
+export const fetchFavoriteOffersAction = createAsyncThunk<void, undefined, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: AxiosInstance;
+}>(
+  'data/fetchFavoriteOffers',
+  async (_arg, { dispatch, extra: api }) => {
+    const { data } = await api.get<Offers>(APIRoute.Favorite);
+    dispatch(setFavoriteOffers(data));
+  },
+);
+
+export const changeFavoriteAction = createAsyncThunk<{ offerId: string; status: number }, { offerId: string; status: number }, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: AxiosInstance;
+}>(
+  'data/changeFavorite',
+  async ({ offerId, status }, {dispatch, extra: api }) => {
+    const {data} = await api.post<Offer>(`${APIRoute.Favorite}/${offerId}/${status}`);
+    if (status === 1) {
+      dispatch(addFavoriteOffer(data));
+    } else {
+      dispatch(removeFavoriteOffer(data.id));
+    }
+    return { offerId, status };
   },
 );
