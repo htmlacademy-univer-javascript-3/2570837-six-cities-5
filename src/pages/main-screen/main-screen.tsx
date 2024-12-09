@@ -8,6 +8,7 @@ import { Cities, SortOptions } from '@const';
 import { useAppSelector, useAppDispatch } from '@hooks/index';
 import SortingOptions from '@components/sorting-options/sorting-options.tsx';
 import { setSortOption } from '@store/action.ts';
+import MainEmpty from '@pages/empty-main-screen/empty-main-screen';
 
 
 export default function MainScreen(): JSX.Element {
@@ -54,27 +55,30 @@ export default function MainScreen(): JSX.Element {
           </section>
         </div>
         <div className="cities">
-          <div className="cities__places-container container">
-            <section className="cities__places places">
-              <h2 className="visually-hidden">Places</h2>
-              <b className="places__found">{`${currentCityOffers.length} places to stay in ${city}`}</b>
-              <SortingOptions
-                onSortChange={handleSortChange}
-              />
-              <OfferList
-                pageKeyWords={'cities__places'}
-                offers={currentCityOffers}
-                onActiveOfferChange={setActiveOfferId}
-              />
-            </section>
-            <div className="cities__right-section">
-              <Map
-                offers={currentCityOffers}
-                selectedOffer={selectedOffer}
-                className="cities__map map"
-              />
+          {currentCityOffers.length > 0 ? (
+            <div className="cities__places-container container">
+              <section className="cities__places places">
+                <h2 className="visually-hidden">Places</h2>
+                <b className="places__found">{`${currentCityOffers.length} places to stay in ${city}`}</b>
+                <SortingOptions
+                  onSortChange={handleSortChange}
+                />
+                <OfferList
+                  pageKeyWords={'cities__places'}
+                  offers={currentCityOffers}
+                  onActiveOfferChange={setActiveOfferId}
+                />
+              </section>
+              <div className="cities__right-section">
+                <Map
+                  offers={currentCityOffers}
+                  selectedOffer={selectedOffer}
+                  className="cities__map map"
+                />
+              </div>
             </div>
-          </div>
+          ) :
+            <MainEmpty city={city} />}
         </div>
       </main>
     </div>

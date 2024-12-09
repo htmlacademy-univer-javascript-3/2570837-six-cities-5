@@ -1,5 +1,5 @@
 import { createAction } from '@reduxjs/toolkit';
-import { Offers } from '../types/offer';
+import { Offers, Offer } from '../types/offer';
 import { Reviews } from '../types/review';
 import { FullOffers } from '../types/fullOffer';
 import { SortOptions, AuthorizationStatus } from '@const';
@@ -14,3 +14,6 @@ export const setAuthorizationStatus = createAction<AuthorizationStatus>('auth/se
 export const setError = createAction<string | null>('setError');
 export const setUserEmail = createAction<string>('setUserEmail');
 export const setOffersDataLoadingStatus = createAction<boolean>('setOffersDataLoadingStatus');
+export const setFavoriteOffers = createAction<Offers>('favorites/setFavoriteOffers');
+export const addFavoriteOffer = createAction<Offer>('favorites/addFavoriteOffer');
+export const removeFavoriteOffer = createAction<string>('favorites/removeFavoriteOffer');

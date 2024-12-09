@@ -1,26 +1,13 @@
-import { Offer } from '../../types/offer';
 import { Helmet } from 'react-helmet-async';
-import { Link } from 'react-router-dom';
 import Header from '../../components/header/header';
-import PlaceCard from '@components/place-card/place-card';
 import { useAppSelector } from '@hooks/index';
 import { memo, useMemo } from 'react';
+import { FavoritesList } from '@components/favorites-list/favorites-list.tsx';
 
 
 function FavoritesScreen(): JSX.Element {
   const offers = useAppSelector((state) => state.offersList);
   const favorites = useMemo(() => offers.filter((offer) => offer.isBookmarked), [offers]);
-
-  const groupedFavorites = useMemo(
-    () =>
-      favorites.reduce<{ [city: string]: Offer[] }>((acc, offer) => {
-        const city = offer.city.name;
-        (acc[city] = acc[city] || []).push(offer);
-        return acc;
-      }, {}),
-    [favorites]
-  );
-
 
   return (
     <div className="page">
@@ -28,7 +15,6 @@ function FavoritesScreen(): JSX.Element {
         <title>Favorites</title>
       </Helmet>
       <Header />
-
       <main className="page__main page__main--favorites">
         <div className="page__favorites-container container">
           {favorites.length === 0 ? (
@@ -44,37 +30,14 @@ function FavoritesScreen(): JSX.Element {
           ) : (
             <section className="favorites">
               <h1 className="favorites__title">Saved listing</h1>
-              <ul className="favorites__list">
-                {Object.entries(groupedFavorites).map(([city, cityOffers]) => (
-                  <li className="favorites__locations-items" key={city}>
-                    <div className="favorites__locations locations locations--current">
-                      <div className="locations__item">
-                        <Link className="locations__item-link" to="#">
-                          <span>{city}</span>
-                        </Link>
-                      </div>
-                    </div>
-                    <div className="favorites__places">
-                      {cityOffers.map((offer) => (
-                        <PlaceCard
-                          key={offer.id}
-                          pageKeyWords={'favorites'}
-                          card={offer}
-                          onMouseEnter={() => { }}
-                          onMouseLeave={() => { }}
-                        />
-                      ))}
-                    </div>
-                  </li>
-                ))}
-              </ul>
+              <FavoritesList offers={favorites} />
             </section>
           )}
         </div>
       </main>
       <footer className="footer container">
         <a className="footer__logo-link" href="main.html">
-          <img className="footer__logo" src="img/logo.svg" alt="6 cities logo" width={64} height={33} />
+          <img className="footer__logo" src="img/logo.svg" alt="6 cities logo" width="64" height="33" />
         </a>
       </footer>
     </div>
