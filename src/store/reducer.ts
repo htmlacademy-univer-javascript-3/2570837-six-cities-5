@@ -1,8 +1,8 @@
 import { createReducer } from '@reduxjs/toolkit';
-import { setOffersList, changeCity, setReviews, setFullOffers, setSortOption, setError, setOffersDataLoadingStatus, setAuthorizationStatus, setUserEmail } from './action';
+import { setOffersList, changeCity, setReviews, setFullOffers, setSortOption, setError, setOffersDataLoadingStatus, setAuthorizationStatus, setUserEmail, setDetailedOffer, setNearbyOffers } from './action';
 import { Offers } from '../types/offer';
 import { Reviews } from '../types/review';
-import { FullOffers } from '../types/fullOffer';
+import { FullOffers, FullOffer } from '../types/fullOffer';
 import { AuthorizationStatus, SortOptions } from '@const';
 
 
@@ -16,6 +16,8 @@ type StateType = {
   error: string | null;
   isOffersDataLoading: boolean;
   userEmail: string;
+  offer: FullOffer | null;
+  nearbyOffers: Offers;
 };
 
 const initialState: StateType = {
@@ -28,6 +30,8 @@ const initialState: StateType = {
   isOffersDataLoading: false,
   error: null,
   userEmail: '',
+  offer: null,
+  nearbyOffers: [],
 };
 
 export const reducer = createReducer(initialState, (builder) => {
@@ -58,5 +62,11 @@ export const reducer = createReducer(initialState, (builder) => {
     })
     .addCase(setUserEmail, (state, { payload }) => {
       state.userEmail = payload;
+    })
+    .addCase(setDetailedOffer, (state, action) => {
+      state.offer = action.payload;
+    })
+    .addCase(setNearbyOffers, (state, action) => {
+      state.nearbyOffers = action.payload;
     });
 });

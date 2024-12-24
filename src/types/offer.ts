@@ -14,4 +14,10 @@ export type Offer = {
   location: Location;
 };
 
+export type Point = {
+  id: string;
+  city: City;
+  location: Location;
+}
+
 export type Offers = Offer[];

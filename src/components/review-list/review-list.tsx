@@ -1,12 +1,14 @@
 import ReviewItem from '@components/review-item/review-item';
 import { Reviews } from '../../types/review';
 import { useMemo, memo } from 'react';
+import { ReviewForm } from '@components/review-form/review-form';
 
 type ReviewsListProps = {
   reviews: Reviews | undefined;
+  offerId: string;
 };
 
-function ReviewList({ reviews }: ReviewsListProps): JSX.Element {
+function ReviewList({ reviews, offerId }: ReviewsListProps): JSX.Element {
   const sortedReviews = useMemo(() => {
     if (!reviews) {
       return [];
@@ -22,11 +24,15 @@ function ReviewList({ reviews }: ReviewsListProps): JSX.Element {
   }
 
   return (
-    <ul className="reviews__list">
-      {sortedReviews.map((review) => (
-        <ReviewItem key={review.id} review={review} />
-      ))}
-    </ul>
+    <section className="offer__reviews reviews">
+      <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">{reviews.length}</span></h2>
+      <ul className="reviews__list">
+        {sortedReviews.map((review) => (
+          <ReviewItem key={review.id} review={review} />
+        ))}
+      </ul>
+      <ReviewForm offerId={offerId} />
+    </section>
   );
 }
 

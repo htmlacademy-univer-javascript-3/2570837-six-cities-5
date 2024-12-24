@@ -1,8 +1,8 @@
 import { createAction } from '@reduxjs/toolkit';
 import { Offers, Offer } from '../types/offer';
-import { Reviews } from '../types/review';
-import { FullOffers } from '../types/fullOffer';
-import { SortOptions, AuthorizationStatus } from '@const';
+import { Reviews, Review } from '../types/review';
+import { FullOffers, FullOffer } from '../types/fullOffer';
+import { SortOptions, AuthorizationStatus, AppRoute } from '@const';
 
 
 export const setOffersList = createAction<Offers>('offers/setOffersList');
@@ -17,3 +17,7 @@ export const setOffersDataLoadingStatus = createAction<boolean>('setOffersDataLo
 export const setFavoriteOffers = createAction<Offers>('favorites/setFavoriteOffers');
 export const addFavoriteOffer = createAction<Offer>('favorites/addFavoriteOffer');
 export const removeFavoriteOffer = createAction<string>('favorites/removeFavoriteOffer');
+export const redirectToRoute = createAction<AppRoute>('auth/redirectToRoute');
+export const setDetailedOffer = createAction<FullOffer>('offer/setDetailedOffer');
+export const setNearbyOffers = createAction<Offers>('offers/setNearbyOffers');
+export const addComment = createAction<Review>('comments/addComment');

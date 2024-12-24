@@ -3,12 +3,12 @@ import { useState, useCallback, useEffect, memo } from 'react';
 import PlaceCard from '@components/place-card/place-card';
 
 type OfferListProps = {
-  pageKeyWords: string;
   offers: Offers;
   onActiveOfferChange: (offerId: string | null) => void;
+  parentOfferId?: string;
 };
 
-function OffersList({ pageKeyWords, offers, onActiveOfferChange }: OfferListProps): JSX.Element {
+function OffersList({ offers, onActiveOfferChange, parentOfferId = undefined }: OfferListProps): JSX.Element {
   const [activeOfferId, setActiveOfferId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -23,15 +23,17 @@ function OffersList({ pageKeyWords, offers, onActiveOfferChange }: OfferListProp
     setActiveOfferId(null);
   }, []);
 
+  const containerName = parentOfferId ? 'near-places__list places__list' : 'cities__places-list places__list tabs__content';
+
   return (
-    <div className={`${pageKeyWords}__places-list places__list tabs__content`}>
+    <div className={containerName}>
       {offers.map((offer) => (
         <PlaceCard
           key={offer.id}
-          pageKeyWords={pageKeyWords}
           card={offer}
           onMouseEnter={() => handleMouseEnter(offer.id)}
           onMouseLeave={handleMouseLeave}
+          parentOfferId={parentOfferId}
         />
       ))}
     </div>
