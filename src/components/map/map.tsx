@@ -1,12 +1,12 @@
 import { useRef, useEffect, useMemo, memo } from 'react';
 import { Icon, Marker, layerGroup } from 'leaflet';
 import useMap from '@hooks/use-map';
-import { Point } from '../../types/offer';
+import { Offers } from '../../types/offer';
 import { DEFAULT_MARKER_ICON, CURRENT_MARKER_ICON } from '@const';
 import 'leaflet/dist/leaflet.css';
 
 type MapProps = {
-  points: Point[];
+  points: Offers;
   selectedPointId: string | null;
   height: number;
 };
@@ -54,7 +54,7 @@ function Map({ points, selectedPointId, height }: MapProps): JSX.Element {
         map.removeLayer(markerLayer);
       };
     }
-  }, [map, points, selectedPointId]);
+  }, [map, markerLayer, points, selectedPointId]);
 
   return (
     <div

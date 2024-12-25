@@ -1,7 +1,7 @@
 import React, { ChangeEvent, FormEvent, memo, useCallback, useState } from 'react';
-import { useAppDispatch } from '../../hooks';
-import { postCommentAction } from '../../store/api-actions';
-import { showCustomToast } from '../custom-toast/custom-toast';
+import { useAppDispatch } from '@hooks/index';
+import { postReviewAction } from '@store/api-actions';
+import { toast } from 'react-toastify';
 
 const getRatingTitle = (star: number) => {
   switch (star) {
@@ -46,10 +46,10 @@ export default function ReviewFormComponent({ offerId }: ReviewFormProps): JSX.E
     setIsSubmitting(true);
 
     try {
-      await dispatch(postCommentAction({ offerId, comment: review, rating: Number(rating) }));
+      await dispatch(postReviewAction({ offerId, comment: review, rating: Number(rating) }));
       setFormData({ rating: '', review: '' });
     } catch (error) {
-      showCustomToast('Failed to submit the review. Please try again.');
+      toast.warn('Failed to submit the review. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
@@ -57,7 +57,7 @@ export default function ReviewFormComponent({ offerId }: ReviewFormProps): JSX.E
 
   const handleSubmit = useCallback((e: FormEvent) => {
     handleSubmitAsync(e).catch(() => {
-      showCustomToast('Failed to submit the review. Please try again.');
+      toast.warn('Failed to submit the review. Please try again.');
     });
   }, [handleSubmitAsync]);
 

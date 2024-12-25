@@ -9,8 +9,8 @@ export type FullOffer = {
   city: City;
   location: Location;
   isPremium: boolean;
-  starsCount: number;
-  isBookmarked: boolean;
+  rating: number;
+  isFavorite: boolean;
   bedrooms: number;
   maxAdults: number;
   goods: string[];

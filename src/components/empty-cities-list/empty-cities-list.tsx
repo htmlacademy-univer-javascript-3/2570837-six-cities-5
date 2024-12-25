@@ -1,8 +1,8 @@
-type MainEmptyProps = {
+type EmptyCitiesListProps = {
   city: string;
 }
 
-export default function MainEmpty({ city }: MainEmptyProps): JSX.Element {
+export default function EmptyCitiesList({ city }: EmptyCitiesListProps): JSX.Element {
   return (
     <div className="cities__places-container cities__places-container--empty container">
       <section className="cities__no-places">

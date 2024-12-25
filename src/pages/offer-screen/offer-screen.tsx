@@ -1,78 +1,64 @@
 import { Helmet } from 'react-helmet-async';
 import Header from '@components/header/header';
-import { useParams } from 'react-router-dom';
-import { useEffect, useMemo } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { useEffect, useMemo, useCallback } from 'react';
 import { MemoizedMap } from '@components/map/map';
-import { AuthorizationStatus, AppRoute } from '@const';
+import { AuthorizationStatus, AppRoute, MAX_NEARBY_OFFERS } from '@const';
 import ReviewList from '@components/review-list/review-list';
-import OffersList from '@components/offer-list/offer-list';
+import OffersList from '@components/offers-list/offers-list';
+import LoadingScreen from '@pages/loading-screen/loading-screen';
 import { useAppDispatch, useAppSelector } from '@hooks/index';
-import { fetchDetailedOfferAction, changeFavoriteAction } from '@store/api-actions';
-import { redirectToRoute } from '@store/action';
-import { Point } from 'src/types/offer';
-import { showCustomToast } from '@components/custom-toast/custom-toast';
+import { changeFavoriteOffersAction, fetchFullOfferAction } from '@store/api-actions';
 import NotFoundScreen from '@pages/not-found-screen/not-found-screen';
 import ReviewForm from '@components/review-form/review-form';
+import { getAuthorizationStatus } from '@store/user-info/selector';
+import { getNearbyOffers, getReviews, getOfferLoadingStatus, getFullOffer } from '@store/offer-data/selector';
+import { getOffers } from '@store/offers-data/selector';
 
 
 export default function OfferScreen(): JSX.Element {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const offer = useAppSelector((state) => state.offer);
-  const nearbyOffers = useAppSelector((state) => state.nearbyOffers);
-  const reviews = useAppSelector((state) => state.reviews);
-  const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
+
+  const offers = useAppSelector(getOffers);
+  const fullOffer = useAppSelector(getFullOffer);
+  const nearbyOffers = useAppSelector(getNearbyOffers);
+  const reviews = useAppSelector(getReviews);
+  const isLoading = useAppSelector(getOfferLoadingStatus);
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
+  const memoizedNearbyOffers = useMemo(() => nearbyOffers.slice(0, MAX_NEARBY_OFFERS), [nearbyOffers]);
+  const currentOffer = useMemo(() => offers.find((offer) => offer.id === id), [offers, id]);
+
+  const handleBookmarkedClick = useCallback(() => {
+    if (authorizationStatus === AuthorizationStatus.NoAuth) {
+      navigate(AppRoute.Login);
+    } else if (currentOffer) {
+      const status = currentOffer.isFavorite ? 0 : 1;
+      dispatch(changeFavoriteOffersAction({ offerId: currentOffer.id, status }));
+    }
+  }, [authorizationStatus, navigate, dispatch, currentOffer]);
 
   useEffect(() => {
-    if (id) {
-      dispatch(fetchDetailedOfferAction(id));
+    if (id && !currentOffer) {
+      dispatch(fetchFullOfferAction({ id }));
     }
-  }, [dispatch, id]);
+  }, [currentOffer, dispatch, id]);
 
-  const points: Point[] = useMemo(() => {
-    if (!offer) {
-      return [];
-    }
-    return [
-      ...nearbyOffers.map((nearbyOffer) => ({
-        id: nearbyOffer.id,
-        city: nearbyOffer.city,
-        location: nearbyOffer.location
-      })),
-      {
-        id: offer.id,
-        city: offer.city,
-        location: offer.location
-      }
-    ];
-  }, [nearbyOffers, offer]);
+  if (isLoading) {
+    return <LoadingScreen />;
+  }
 
-  if (!offer) {
+  if (!fullOffer || !currentOffer) {
     return (
       <NotFoundScreen />
     );
   }
 
-  const handleFavoriteClick = async () => {
-    if (authorizationStatus !== AuthorizationStatus.Auth) {
-      dispatch(redirectToRoute(AppRoute.Login));
-      return;
-    }
-
-    await dispatch(changeFavoriteAction({ offerId: offer.id, status: offer.isBookmarked ? 0 : 1 }));
-    dispatch(fetchDetailedOfferAction(offer.id));
-  };
-
-  const handleClickWrapper = () => {
-    handleFavoriteClick().catch((error) => {
-      showCustomToast(`${error}`);
-    });
-  };
-
   return (
     <div className="page">
       <Helmet>
-        <title>{offer.title} - 6 cities</title>
+        <title> 6 cities offer №{currentOffer.id}</title>
       </Helmet>
       <Header />
 
@@ -80,30 +66,30 @@ export default function OfferScreen(): JSX.Element {
         <section className="offer">
           <div className="offer__gallery-container container">
             <div className="offer__gallery">
-              {offer.images.slice(0, 6).map((image) => (
+              {fullOffer.images.map((image) => (
                 <div className="offer__image-wrapper" key={image}>
-                  <img className="offer__image" src={image} alt="Photo studio" />
+                  <img className="offer__image" src={image} alt={`Photo of ${fullOffer.title}`} />
                 </div>
               ))}
             </div>
           </div>
           <div className="offer__container container">
             <div className="offer__wrapper">
-              {offer.isPremium && (
+              {fullOffer.isPremium && (
                 <div className="offer__mark">
                   <span>Premium</span>
                 </div>
               )}
               <div className="offer__name-wrapper">
                 <h1 className="offer__name">
-                  {offer.title}
+                  {fullOffer.title}
                 </h1>
                 <button
-                  className={`offer__bookmark-button ${offer.isBookmarked && 'offer__bookmark-button--active'} button`}
+                  className={`offer__bookmark-button ${currentOffer.isFavorite && 'offer__bookmark-button--active'} button`}
                   type="button"
-                  onClick={handleClickWrapper}
+                  onClick={handleBookmarkedClick}
                 >
-                  <svg className="offer__bookmark-icon" width="31" height="33">
+                  <svg className="offer__bookmark-icon" width={31} height={33}>
                     <use xlinkHref="#icon-bookmark"></use>
                   </svg>
                   <span className="visually-hidden">To bookmarks</span>
@@ -111,30 +97,30 @@ export default function OfferScreen(): JSX.Element {
               </div>
               <div className="offer__rating rating">
                 <div className="offer__stars rating__stars">
-                  <span style={{ width: `${Math.round(offer.starsCount) * 20}%` }}></span>
+                  <span style={{ width: `${Math.round(fullOffer.rating) * 20}%` }}></span>
                   <span className="visually-hidden">Rating</span>
                 </div>
-                <span className="offer__rating-value rating__value">{offer.starsCount}</span>
+                <span className="offer__rating-value rating__value">{fullOffer.rating}</span>
               </div>
               <ul className="offer__features">
                 <li className="offer__feature offer__feature--entire">
-                  {offer.type.charAt(0).toUpperCase() + offer.type.slice(1)}
+                  {fullOffer.type.charAt(0).toUpperCase() + fullOffer.type.slice(1)}
                 </li>
                 <li className="offer__feature offer__feature--bedrooms">
-                  {offer.bedrooms} Bedroom{offer.bedrooms > 1 ? 's' : ''}
+                  {fullOffer.bedrooms} Bedroom{fullOffer.bedrooms > 1 ? 's' : ''}
                 </li>
                 <li className="offer__feature offer__feature--adults">
-                  Max {offer.maxAdults} adult{offer.maxAdults > 1 ? 's' : ''}
+                  Max {fullOffer.maxAdults} adult{fullOffer.maxAdults > 1 ? 's' : ''}
                 </li>
               </ul>
               <div className="offer__price">
-                <b className="offer__price-value">&euro;{offer.price}</b>
+                <b className="offer__price-value">&euro;{fullOffer.price}</b>
                 <span className="offer__price-text">&nbsp;night</span>
               </div>
               <div className="offer__inside">
                 <h2 className="offer__inside-title">What&apos;s inside</h2>
                 <ul className="offer__inside-list">
-                  {offer.goods.map((good) => (
+                  {fullOffer.goods.map((good) => (
                     <li className="offer__inside-item" key={good}>
                       {good}
                     </li>
@@ -145,16 +131,16 @@ export default function OfferScreen(): JSX.Element {
                 <h2 className="offer__host-title">Meet the host</h2>
                 <div className="offer__host-user user">
                   <div
-                    className={`offer__avatar-wrapper ${offer.host.isPro ? 'offer__avatar-wrapper--pro' : ''} user__avatar-wrapper`}
+                    className={`offer__avatar-wrapper ${fullOffer.host.isPro ? 'offer__avatar-wrapper--pro' : ''} user__avatar-wrapper`}
                   >
-                    <img className="offer__avatar user__avatar" src={offer.host.avatarUrl} width="74" height="74"
+                    <img className="offer__avatar user__avatar" src={fullOffer.host.avatarUrl} width={74} height={74}
                       alt="Host avatar"
                     />
                   </div>
                   <span className="offer__user-name">
-                    {offer.host.name}
+                    {fullOffer.host.name}
                   </span>
-                  {offer.host.isPro && (
+                  {fullOffer.host.isPro && (
                     <span className="offer__user-status">
                       Pro
                     </span>
@@ -162,23 +148,23 @@ export default function OfferScreen(): JSX.Element {
                 </div>
                 <div className="offer__description">
                   <p className="offer__text">
-                    {offer.descriptions}
+                    {fullOffer.descriptions}
                   </p>
                 </div>
               </div>
-              <ReviewList reviews={reviews} offerId={offer.id} />
+              <ReviewList reviews={reviews} offerId={fullOffer.id} />
               {authorizationStatus === AuthorizationStatus.Auth && (<ReviewForm offerId={id ?? ''} />)}
             </div>
           </div>
           <section className={'offer__map map'} data-testid={'map'}>
-            <MemoizedMap points={points} selectedPointId={offer.id} height={600} />
+            <MemoizedMap points={[currentOffer, ...memoizedNearbyOffers]} selectedPointId={currentOffer.id} height={600} />
           </section>
         </section>
         <div className="container">
           <section className="near-places places">
             <h2 className="near-places__title">Other places in the neighbourhood</h2>
             <OffersList offers={nearbyOffers} onActiveOfferChange={() => {
-            }} parentOfferId={offer.id}
+            }} parentOfferId={currentOffer.id}
             />
           </section>
         </div>

@@ -20,8 +20,8 @@ export const fullOffers: FullOffers = [
       'zoom': 16
     },
     'isPremium': true,
-    'starsCount': 4.8,
-    'isBookmarked': true,
+    'rating': 4.8,
+    'isFavorite': true,
     'bedrooms': 3,
     'maxAdults': 4,
     'goods': [

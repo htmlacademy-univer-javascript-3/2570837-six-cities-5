@@ -19,7 +19,7 @@ export enum AuthorizationStatus {
 export const DEFAULT_MARKER_ICON = 'https://assets.htmlacademy.ru/content/intensive/javascript-1/demo/interactive-map/pin.svg';
 export const CURRENT_MARKER_ICON = 'https://assets.htmlacademy.ru/content/intensive/javascript-1/demo/interactive-map/main-pin.svg';
 
-export const Cities: string[] = ['Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf'];
+export const CITIES: string[] = ['Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf'];
 
 export enum SortOptions {
   Popular = 'Popular',
@@ -36,4 +36,12 @@ export enum APIRoute {
   Logout = '/logout',
 }
 
+export enum NameSpace {
+  Offer = 'OFFER',
+  Offers = 'OFFERS',
+  User = 'USER',
+  App = 'APP',
+}
+
 export const TIMEOUT_SHOW_ERROR = 2000;
+export const MAX_NEARBY_OFFERS = 3;

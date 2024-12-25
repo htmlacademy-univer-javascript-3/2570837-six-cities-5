@@ -8,8 +8,8 @@ export const offers: Offers = [
     'type': 'Apartment',
     'imgPath': 'img/apartment-01.jpg',
     'isPremium': true,
-    'starsCount': 4,
-    'isBookmarked': false,
+    'rating': 4,
+    'isFavorite': false,
     'city': {
       'name': 'Amsterdam',
       'location': {
@@ -31,8 +31,8 @@ export const offers: Offers = [
     'type': 'Room',
     'imgPath': 'img/room.jpg',
     'isPremium': false,
-    'starsCount': 4.1,
-    'isBookmarked': true,
+    'rating': 4.1,
+    'isFavorite': true,
     'city': {
       'name': 'Amsterdam',
       'location': {
@@ -54,8 +54,8 @@ export const offers: Offers = [
     'type': 'Apartment',
     'imgPath': 'img/apartment-02.jpg',
     'isPremium': false,
-    'starsCount': 4,
-    'isBookmarked': false,
+    'rating': 4,
+    'isFavorite': false,
     'city': {
       'name': 'Amsterdam',
       'location': {
@@ -77,8 +77,8 @@ export const offers: Offers = [
     'type': 'Apartment',
     'imgPath': 'img/apartment-03.jpg',
     'isPremium': true,
-    'starsCount': 5,
-    'isBookmarked': true,
+    'rating': 5,
+    'isFavorite': true,
     'city': {
       'name': 'Amsterdam',
       'location': {
@@ -100,8 +100,8 @@ export const offers: Offers = [
     'type': 'Apartment',
     'imgPath': 'img/apartment-small-04.jpg',
     'isPremium': false,
-    'starsCount': 5,
-    'isBookmarked': true,
+    'rating': 5,
+    'isFavorite': true,
     'city': {
       'name': 'Cologne',
       'location': {

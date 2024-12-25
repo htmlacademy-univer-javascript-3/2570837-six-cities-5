@@ -6,18 +6,12 @@ export type Offer = {
   title: string;
   price: number;
   type: string;
-  imgPath: string;
+  previewImage: string;
   isPremium: boolean;
-  starsCount: number;
-  isBookmarked: boolean;
+  rating: number;
+  isFavorite: boolean;
   city: City;
   location: Location;
 };
-
-export type Point = {
-  id: string;
-  city: City;
-  location: Location;
-}
 
 export type Offers = Offer[];

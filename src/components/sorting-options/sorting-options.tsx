@@ -1,19 +1,20 @@
-import { memo, useCallback, useState } from 'react';
+import { memo, useCallback, useMemo, useState } from 'react';
 import { SortOptions } from '@const';
+import { useAppDispatch, useAppSelector } from '@hooks/index';
+import { getSortOption } from '@store/app-data/selector';
+import { setSortOption } from '@store/app-data/app-data';
 
-type SortOptionsProps = {
-  onSortChange: (option: SortOptions) => void;
-};
-
-function SortingOptions({ onSortChange }: SortOptionsProps): JSX.Element {
-  const [selectedOption, setSelectedOption] = useState(SortOptions.Popular);
+function SortingOptions(): JSX.Element {
+  const dispatch = useAppDispatch();
+  const selectedOption = useAppSelector(getSortOption);
   const [isOpen, setIsOpen] = useState(false);
 
   const handleSortChange = useCallback((option: SortOptions) => {
-    setSelectedOption(option);
-    onSortChange(option);
+    dispatch(setSortOption(option));
     setIsOpen(false);
-  }, [onSortChange]);
+  }, [dispatch]);
+
+  const sortOptions = useMemo(() => Object.values(SortOptions), []);
 
   const toggleDropdown = useCallback(() => {
     setIsOpen((prevState) => !prevState);
@@ -33,7 +34,7 @@ function SortingOptions({ onSortChange }: SortOptionsProps): JSX.Element {
         </svg>
       </span>
       <ul className={`places__options places__options--custom ${isOpen ? 'places__options--opened' : ''}`}>
-        {Object.values(SortOptions).map((option) => (
+        {sortOptions.map((option) => (
           <li
             key={option}
             className={`places__option ${option === selectedOption ? 'places__option--active' : ''}`}
