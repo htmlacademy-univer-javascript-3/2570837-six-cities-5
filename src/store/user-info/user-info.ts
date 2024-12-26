@@ -1,14 +1,13 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { NameSpace } from '../../const';
-import { AuthorizationStatus } from '../../const';
-import { UserInfo } from '../../types/state.ts';
-import { UserData } from 'src/types/user-data';
-import { Offer, Offers } from 'src/types/offer';
+import { NameSpace, AuthorizationStatus } from '@const';
+import { UserInfo } from '../../types/state';
+import { UserData } from '../../types/user-data';
+import { Offers } from '../../types/offer';
 
 const initialState: UserInfo = {
   authorizationStatus: AuthorizationStatus.Unknown,
   userData: null,
-  favoriteOffers: [] as Offer[],
+  favoriteOffers: [] as Offers,
   favoriteOffersCount: 0,
 };
 

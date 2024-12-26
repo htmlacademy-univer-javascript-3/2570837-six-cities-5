@@ -43,7 +43,6 @@ export enum NameSpace {
   App = 'APP',
 }
 
-export const TIMEOUT_SHOW_ERROR = 2000;
 export const MAX_NEARBY_OFFERS = 3;
 export const MAX_REVIEWS_COUNT = 10;
 

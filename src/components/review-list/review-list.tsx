@@ -1,9 +1,10 @@
-import { Review } from '../../types/review.ts';
-import { ReviewItem } from '../review-item/review-item.tsx';
+import { Review } from '../../types/review';
+import { ReviewItem } from '../review-item/review-item';
 import { ReviewForm } from '../review-form/review-form';
 import { useAppSelector } from '@hooks/index';
 import { memo, useMemo } from 'react';
 import { getUserInfo } from '@store/user-info/selector';
+import { MAX_REVIEWS_COUNT } from '@const';
 
 type ReviewsListProps = {
   reviews: Review[];
@@ -18,7 +19,7 @@ function ReviewsListComponent({ reviews, offerId }: ReviewsListProps) {
   );
 
   const limitedReviews = useMemo(() =>
-    sortedReviews.slice(0, 10), [sortedReviews]
+    sortedReviews.slice(0, MAX_REVIEWS_COUNT), [sortedReviews]
   );
 
   return (

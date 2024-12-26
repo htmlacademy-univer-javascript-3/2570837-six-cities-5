@@ -1,6 +1,6 @@
 import { FormEvent, useRef, useCallback, memo } from 'react';
-import { useAppDispatch } from '../../hooks';
-import { loginAction } from '../../store/api-actions.ts';
+import { useAppDispatch } from '@hooks/index';
+import { loginAction } from '@store/api-actions';
 import { toast } from 'react-toastify';
 
 const validatePassword = (password: string): boolean => {

@@ -3,7 +3,7 @@ import { NameSpace } from '@const';
 import { OfferData } from '../../types/state';
 import { FullOffer } from '../../types/fullOffer';
 import { Review, Reviews } from '../../types/review';
-import { Offers } from '../../types/offer.ts';
+import { Offers } from '../../types/offer';
 
 
 const initialState: OfferData = {

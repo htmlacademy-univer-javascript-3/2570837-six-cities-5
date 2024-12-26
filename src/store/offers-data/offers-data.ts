@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { NameSpace } from '../../const';
+import { NameSpace } from '@const';
 import { OffersData } from '../../types/state.ts';
 import { Offers, Offer } from '../../types/offer';
 

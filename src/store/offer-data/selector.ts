@@ -1,6 +1,6 @@
 import {State} from '../../types/state';
 import { Offers} from '../../types/offer';
-import { FullOffer } from 'src/types/fullOffer';
+import { FullOffer } from '../../types/fullOffer';
 import {NameSpace} from '@const';
 import { Reviews } from '../../types/review';
 

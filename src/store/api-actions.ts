@@ -12,6 +12,7 @@ import {setFullOffer, setComments, addComment, setLoadingStatus, setNearbyOffers
 import {loadOffers, setOffersLoadingStatus, updateFavorites} from './offers-data/offers-data';
 import {setAuthorizationStatus, setUserData, setFavoriteOffers, setFavoritesCount,} from './user-info/user-info';
 import { redirectToRoute } from './action';
+import { MAX_NEARBY_OFFERS } from '@const';
 
 
 export const fetchOffersAction = createAsyncThunk<void, undefined, {
@@ -51,7 +52,7 @@ export const fetchNearbyOffersAction = createAsyncThunk<void, string, {
   'data/fetchNearbyOffers',
   async (offerId, { dispatch, extra: api }) => {
     const { data } = await api.get<Offers>(`${APIRoute.Offers}/${offerId}/nearby`);
-    dispatch(setNearbyOffers(data.slice(0, 3)));
+    dispatch(setNearbyOffers(data.slice(0, MAX_NEARBY_OFFERS)));
   },
 );
 
