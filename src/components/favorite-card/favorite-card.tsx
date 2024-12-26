@@ -13,7 +13,7 @@ function FavoriteCardComponent({ offer }: FavoriteCardProps) {
   const dispatch = useAppDispatch();
 
   const handleFavoriteClick = useCallback(() => {
-    dispatch(changeFavoriteOffersAction({ offerId: offer.id, status: 0 }));
+    dispatch(changeFavoriteOffersAction({ id: offer.id, status: 0 }));
   }, [offer.id, dispatch]);
 
   return (

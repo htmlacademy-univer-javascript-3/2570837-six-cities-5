@@ -25,11 +25,9 @@ export default function MainScreen(): JSX.Element {
   const offers = useAppSelector(getOffers);
   const city = useAppSelector(getCity);
   const sortOption = useAppSelector(getSortOption);
-
-  const { filteredOffers, sortedOffers } = useMemo(() => {
+  const sortedOffers = useMemo(() => {
     const filtered = offers.filter((offer) => offer.city.name === city);
-
-    const sorted = [...filtered].sort((a, b) => {
+    return [...filtered].sort((a, b) => {
       switch (sortOption) {
         case SortOptions.PriceLowToHigh:
           return a.price - b.price;
@@ -41,7 +39,6 @@ export default function MainScreen(): JSX.Element {
           return 0;
       }
     });
-    return { filteredOffers: filtered, sortedOffers: sorted };
   }, [offers, city, sortOption]);
 
   return (
@@ -51,7 +48,7 @@ export default function MainScreen(): JSX.Element {
       </Helmet>
       <Header />
 
-      <main className={`page__main page__main--index ${filteredOffers.length === 0 ? 'page__main--index-empty' : ''}`}>
+      <main className={`page__main page__main--index ${sortedOffers.length === 0 ? 'page__main--index-empty' : ''}`}>
         <h1 className="visually-hidden">Cities</h1>
         <div className="tabs">
           <section className="locations container">
@@ -59,11 +56,11 @@ export default function MainScreen(): JSX.Element {
           </section>
         </div>
         <div className="cities">
-          {filteredOffers.length > 0 ? (
+          {sortedOffers.length > 0 ? (
             <div className="cities__places-container container">
               <section className="cities__places places">
                 <h2 className="visually-hidden">Places</h2>
-                <b className="places__found">{getPlacesText(filteredOffers.length)} to stay in {city}</b>
+                <b className="places__found">{getPlacesText(sortedOffers.length)} to stay in {city}</b>
                 <SortingOptions />
                 <OfferList
                   offers={sortedOffers}
@@ -73,7 +70,7 @@ export default function MainScreen(): JSX.Element {
               <div className="cities__right-section">
                 <section className="cities__map map" data-testid={'map'}>
                   <MemoizedMap
-                    points={filteredOffers}
+                    points={sortedOffers}
                     selectedPointId={activeOfferId}
                     height={700}
                   />

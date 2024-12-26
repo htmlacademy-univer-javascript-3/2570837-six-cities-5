@@ -25,12 +25,6 @@ export const userInfo = createSlice({
     setFavoriteOffers: (state, action: PayloadAction<Offers>) => {
       state.favoriteOffers = action.payload;
     },
-    addFavoriteOffer: (state, action: PayloadAction<Offer>) => {
-      state.favoriteOffers.push(action.payload);
-    },
-    removeFavoriteOffer: (state, action: PayloadAction<string>) => {
-      state.favoriteOffers = state.favoriteOffers.filter((offer) => offer.id !== action.payload);
-    },
     setFavoritesCount: (state, action: PayloadAction<number>) => {
       state.favoriteOffersCount = action.payload;
     },
@@ -41,8 +35,6 @@ export const {
   setAuthorizationStatus,
   setUserData,
   setFavoriteOffers,
-  addFavoriteOffer,
-  removeFavoriteOffer,
   setFavoritesCount,
 } = userInfo.actions;
 export const userReducer = userInfo.reducer;

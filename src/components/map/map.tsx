@@ -1,5 +1,5 @@
-import { useRef, useEffect, useMemo, memo } from 'react';
-import { Icon, Marker, layerGroup } from 'leaflet';
+import { useRef, useEffect, memo } from 'react';
+import leaflet from 'leaflet';
 import useMap from '@hooks/use-map';
 import { Offers } from '../../types/offer';
 import { DEFAULT_MARKER_ICON, CURRENT_MARKER_ICON } from '@const';
@@ -11,13 +11,13 @@ type MapProps = {
   height: number;
 };
 
-const defaultMarkerIcon = new Icon({
+const defaultMarkerIcon = leaflet.icon({
   iconUrl: DEFAULT_MARKER_ICON,
   iconSize: [40, 40],
   iconAnchor: [20, 40]
 });
 
-const currentMarkerIcon = new Icon({
+const currentMarkerIcon = leaflet.icon({
   iconUrl: CURRENT_MARKER_ICON,
   iconSize: [40, 40],
   iconAnchor: [20, 40]
@@ -28,33 +28,39 @@ function Map({ points, selectedPointId, height }: MapProps): JSX.Element {
   const mapRef = useRef(null);
   const map = useMap(mapRef, points[0].city);
 
-  const markerLayer = useMemo(() => layerGroup(), []);
-
   useEffect(() => {
     if (map) {
-      markerLayer.clearLayers();
-      points.forEach((offer) => {
-        if (offer && offer.location) {
-          const marker = new Marker({
-            lat: offer.location.latitude,
-            lng: offer.location.longitude
-          });
-          marker
-            .setIcon(
-              selectedPointId !== null && offer.id === selectedPointId
-                ? currentMarkerIcon
-                : defaultMarkerIcon
-            )
-            .addTo(markerLayer);
+      map.eachLayer((layer) => {
+        if (layer instanceof leaflet.Marker) {
+          map.removeLayer(layer);
         }
       });
 
-      markerLayer.addTo(map);
-      return () => {
-        map.removeLayer(markerLayer);
-      };
+      const bounds = leaflet.latLngBounds([]);
+
+      points.forEach((point) => {
+        const markerIcon = point.id === selectedPointId ? currentMarkerIcon : defaultMarkerIcon;
+
+        const marker = leaflet
+          .marker(
+            {
+              lat: point.location.latitude,
+              lng: point.location.longitude,
+            },
+            {
+              icon: markerIcon,
+            }
+          )
+          .addTo(map);
+        bounds.extend(marker.getLatLng());
+      });
+
+      if (points.length > 0) {
+        map.fitBounds(bounds, { padding: [50, 50] });
+      }
     }
-  }, [map, markerLayer, points, selectedPointId]);
+  }, [map, points, selectedPointId]);
+
 
   return (
     <div

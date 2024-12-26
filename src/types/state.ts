@@ -1,8 +1,8 @@
 import { store } from '@store/index';
-import {Reviews} from './review.ts';
+import {Reviews} from './review';
 import {Offers} from './offer';
 import { FullOffer } from './fullOffer';
-import {AuthorizationStatus, SortOptions} from '../const.ts';
+import {AuthorizationStatus, SortOptions} from '@const';
 import {UserData} from './user-data';
 
 export type AppData = {

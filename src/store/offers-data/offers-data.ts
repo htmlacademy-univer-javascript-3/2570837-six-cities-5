@@ -23,8 +23,20 @@ export const offersData = createSlice({
         offer.id === action.payload.id ? action.payload : offer
       );
     },
+    updateFavorites: (state, action: PayloadAction<{ id: string; isFavorite: boolean }>) => {
+      const { id, isFavorite } = action.payload;
+
+      const updateFavoriteStatus = (offers: Offers) => {
+        const offerIndex = offers.findIndex((offer) => offer.id === id);
+        if (offerIndex !== -1) {
+          offers[offerIndex].isFavorite = isFavorite;
+        }
+      };
+
+      updateFavoriteStatus(state.offers);
+    },
   },
 });
 
-export const { loadOffers, setOffersLoadingStatus, updateOffers } = offersData.actions;
+export const { loadOffers, setOffersLoadingStatus, updateOffers, updateFavorites} = offersData.actions;
 export const offersDataReducer = offersData.reducer;

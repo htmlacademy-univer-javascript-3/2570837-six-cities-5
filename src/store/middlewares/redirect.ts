@@ -1,7 +1,7 @@
 import {PayloadAction} from '@reduxjs/toolkit';
 import browserHistory from '../../browser-history';
 import {Middleware} from 'redux';
-import {rootReducer} from '../root-reducer';
+import {rootReducer} from '../root-reducer.ts';
 
 type Reducer = ReturnType<typeof rootReducer>;
 
@@ -9,7 +9,7 @@ export const redirect: Middleware<unknown, Reducer> =
   () =>
     (next) =>
       (action: PayloadAction<string>) => {
-        if (action.type === 'redirectToRoute') {
+        if (action.type === 'auth/redirectToRoute') {
           browserHistory.push(action.payload);
         }
 

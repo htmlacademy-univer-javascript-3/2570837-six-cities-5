@@ -27,7 +27,7 @@ export default function PlaceCard({ card, onMouseEnter, onMouseLeave, parentOffe
       return;
     }
     const newStatus = card.isFavorite ? 0 : 1;
-    await dispatch(changeFavoriteOffersAction({ offerId: card.id, status: newStatus }));
+    await dispatch(changeFavoriteOffersAction({ id: card.id, status: newStatus }));
     if (parentOfferId) {
       dispatch(fetchNearbyOffersAction(parentOfferId));
     }

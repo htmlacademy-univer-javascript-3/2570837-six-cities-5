@@ -1,40 +1,40 @@
-import ReviewItem from '@components/review-item/review-item';
-import { Reviews } from '../../types/review';
-import { useMemo, memo } from 'react';
-import { ReviewForm } from '@components/review-form/review-form';
+import { Review } from '../../types/review.ts';
+import { ReviewItem } from '../review-item/review-item.tsx';
+import { ReviewForm } from '../review-form/review-form';
+import { useAppSelector } from '@hooks/index';
+import { memo, useMemo } from 'react';
+import { getUserInfo } from '@store/user-info/selector';
 
 type ReviewsListProps = {
-  reviews: Reviews | undefined;
+  reviews: Review[];
   offerId: string;
-};
+}
 
-function ReviewList({ reviews, offerId }: ReviewsListProps): JSX.Element {
-  const sortedReviews = useMemo(() => {
-    if (!reviews) {
-      return [];
-    }
+function ReviewsListComponent({ reviews, offerId }: ReviewsListProps) {
+  const userInfo = useAppSelector(getUserInfo);
 
-    return [...reviews]
-      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-      .slice(0, 10);
-  }, [reviews]);
+  const sortedReviews = useMemo(() =>
+    reviews.slice().sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()), [reviews]
+  );
 
-  if (!reviews || sortedReviews.length === 0) {
-    return <p style={{ textAlign: 'center', fontSize: '32px' }}>Leave first review</p>;
-  }
+  const limitedReviews = useMemo(() =>
+    sortedReviews.slice(0, 10), [sortedReviews]
+  );
 
   return (
     <section className="offer__reviews reviews">
-      <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">{reviews.length}</span></h2>
+      <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">{limitedReviews.length}</span></h2>
       <ul className="reviews__list">
-        {sortedReviews.map((review) => (
-          <ReviewItem key={review.id} review={review} />
+        {limitedReviews.map((review) => (
+          <ReviewItem
+            key={review.id}
+            review={review}
+          />
         ))}
       </ul>
-      <ReviewForm offerId={offerId} />
+      {userInfo && <ReviewForm offerId={offerId} />}
     </section>
   );
 }
 
-const MemoizedReviewsList = memo(ReviewList);
-export default MemoizedReviewsList;
+export const ReviewsList = memo(ReviewsListComponent);

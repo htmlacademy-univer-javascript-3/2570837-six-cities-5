@@ -4,13 +4,12 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useMemo, useCallback } from 'react';
 import { MemoizedMap } from '@components/map/map';
 import { AuthorizationStatus, AppRoute, MAX_NEARBY_OFFERS } from '@const';
-import ReviewList from '@components/review-list/review-list';
+import { ReviewsList } from '@components/review-list/review-list';
 import OffersList from '@components/offers-list/offers-list';
 import LoadingScreen from '@pages/loading-screen/loading-screen';
 import { useAppDispatch, useAppSelector } from '@hooks/index';
 import { changeFavoriteOffersAction, fetchFullOfferAction } from '@store/api-actions';
 import NotFoundScreen from '@pages/not-found-screen/not-found-screen';
-import ReviewForm from '@components/review-form/review-form';
 import { getAuthorizationStatus } from '@store/user-info/selector';
 import { getNearbyOffers, getReviews, getOfferLoadingStatus, getFullOffer } from '@store/offer-data/selector';
 import { getOffers } from '@store/offers-data/selector';
@@ -35,13 +34,13 @@ export default function OfferScreen(): JSX.Element {
       navigate(AppRoute.Login);
     } else if (currentOffer) {
       const status = currentOffer.isFavorite ? 0 : 1;
-      dispatch(changeFavoriteOffersAction({ offerId: currentOffer.id, status }));
+      dispatch(changeFavoriteOffersAction({ id: currentOffer.id, status }));
     }
   }, [authorizationStatus, navigate, dispatch, currentOffer]);
 
   useEffect(() => {
-    if (id && !currentOffer) {
-      dispatch(fetchFullOfferAction({ id }));
+    if (id) {
+      dispatch(fetchFullOfferAction(id));
     }
   }, [currentOffer, dispatch, id]);
 
@@ -58,7 +57,7 @@ export default function OfferScreen(): JSX.Element {
   return (
     <div className="page">
       <Helmet>
-        <title> 6 cities offer №{currentOffer.id}</title>
+        <title> 6 cities - {currentOffer.title}</title>
       </Helmet>
       <Header />
 
@@ -148,12 +147,11 @@ export default function OfferScreen(): JSX.Element {
                 </div>
                 <div className="offer__description">
                   <p className="offer__text">
-                    {fullOffer.descriptions}
+                    {fullOffer.description}
                   </p>
                 </div>
               </div>
-              <ReviewList reviews={reviews} offerId={fullOffer.id} />
-              {authorizationStatus === AuthorizationStatus.Auth && (<ReviewForm offerId={id ?? ''} />)}
+              <ReviewsList reviews={reviews} offerId={fullOffer.id} />
             </div>
           </div>
           <section className={'offer__map map'} data-testid={'map'}>

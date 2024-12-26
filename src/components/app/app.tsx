@@ -13,6 +13,8 @@ import browserHistory from '../../browser-history.ts';
 import HistoryRouter from '../history-router/history-router.tsx';
 import { getAuthorizationStatus } from '@store/user-info/selector';
 import { getOffersLoadingStatus } from '@store/offers-data/selector';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 export default function App(): JSX.Element {
@@ -26,37 +28,40 @@ export default function App(): JSX.Element {
   }
 
   return (
-    <HelmetProvider>
-      <HistoryRouter history={browserHistory}>
-        <Routes>
-          <Route
-            path={AppRoute.Root}
-            element={<MainScreen />}
-          />
-          <Route
-            path={AppRoute.Login}
-            element={<LoginScreen />}
-          />
-          <Route
-            path={AppRoute.Favorites}
-            element={
-              <PrivateRoute
-                authorizationStatus={authorizationStatus}
-              >
-                <FavoritesScreen />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path={AppRoute.Offer}
-            element={<OfferScreen />}
-          />
-          <Route
-            path="*"
-            element={<NotFoundScreen />}
-          />
-        </Routes>
-      </HistoryRouter>
-    </HelmetProvider>
+    <>
+      <ToastContainer />
+      <HelmetProvider>
+        <HistoryRouter history={browserHistory}>
+          <Routes>
+            <Route
+              path={AppRoute.Root}
+              element={<MainScreen />}
+            />
+            <Route
+              path={AppRoute.Login}
+              element={<LoginScreen />}
+            />
+            <Route
+              path={AppRoute.Favorites}
+              element={
+                <PrivateRoute
+                  authorizationStatus={authorizationStatus}
+                >
+                  <FavoritesScreen />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path={`${AppRoute.Offer}/:id`}
+              element={<OfferScreen />}
+            />
+            <Route
+              path="*"
+              element={<NotFoundScreen />}
+            />
+          </Routes>
+        </HistoryRouter>
+      </HelmetProvider>
+    </>
   );
 }
