@@ -6,7 +6,8 @@ export enum AppRoute {
   Root = '/',
   Login = '/login',
   Favorites = '/favorites',
-  Offer = '/offer/:id'
+  Offer = '/offer',
+  NotFound = '/not-found',
 }
 
 export enum AuthorizationStatus {
@@ -15,10 +16,10 @@ export enum AuthorizationStatus {
   Unknown = 'UNKNOWN',
 }
 
-export const DEFAULT_MARKER_ICON = 'https://assets.htmlacademy.ru/content/intensive/javascript-1/demo/interactive-map/pin.svg';
-export const CURRENT_MARKER_ICON = 'https://assets.htmlacademy.ru/content/intensive/javascript-1/demo/interactive-map/main-pin.svg';
+export const DEFAULT_MARKER_ICON = '/img/pin.svg';
+export const CURRENT_MARKER_ICON = '/img/pin-active.svg';
 
-export const Cities: string[] = ['Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf'];
+export const CITIES: string[] = ['Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf'];
 
 export enum SortOptions {
   Popular = 'Popular',
@@ -35,4 +36,15 @@ export enum APIRoute {
   Logout = '/logout',
 }
 
-export const TIMEOUT_SHOW_ERROR = 2000;
+export enum NameSpace {
+  Offer = 'OFFER',
+  Offers = 'OFFERS',
+  User = 'USER',
+  App = 'APP',
+}
+
+export const MAX_NEARBY_OFFERS = 3;
+export const MAX_REVIEWS_COUNT = 10;
+
+export const BACKEND_URL = 'https://14.design.htmlacademy.pro/six-cities';
+export const REQUEST_TIMEOUT = 5000;

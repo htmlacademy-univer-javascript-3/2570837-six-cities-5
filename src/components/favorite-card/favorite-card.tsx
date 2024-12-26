@@ -2,7 +2,7 @@ import { Offer } from '../../types/offer.ts';
 import { Link } from 'react-router-dom';
 import { AppRoute } from '@const';
 import { memo, useCallback } from 'react';
-import { changeFavoriteAction } from '@store/api-actions.ts';
+import { changeFavoriteOffersAction } from '@store/api-actions';
 import { useAppDispatch } from '@hooks/index';
 
 type FavoriteCardProps = {
@@ -13,8 +13,8 @@ function FavoriteCardComponent({ offer }: FavoriteCardProps) {
   const dispatch = useAppDispatch();
 
   const handleFavoriteClick = useCallback(() => {
-    dispatch(changeFavoriteAction({ offerId: offer.id, status: 0 }));
-  }, [offer.isBookmarked, offer.id, dispatch]);
+    dispatch(changeFavoriteOffersAction({ id: offer.id, status: 0 }));
+  }, [offer.id, dispatch]);
 
   return (
     <article className={'favorites__card place-card'}>
@@ -23,9 +23,9 @@ function FavoriteCardComponent({ offer }: FavoriteCardProps) {
           <span>Premium</span>
         </div>}
       <div className={'favorites__image-wrapper place-card__image-wrapper'}>
-        <a href="#">
-          <img className="place-card__image" src={offer.imgPath} width="150" height="110" alt="Place image" />
-        </a>
+        <Link to={`${AppRoute.Offer}/${offer.id}`}>
+          <img className="place-card__image" src={offer.previewImage} width="150" height="110" alt="Place image" />
+        </Link>
       </div>
       <div className={'favorites__card-info place-card__info'}>
         <div className="place-card__price-wrapper">
@@ -46,7 +46,7 @@ function FavoriteCardComponent({ offer }: FavoriteCardProps) {
         </div>
         <div className="place-card__rating rating">
           <div className="place-card__stars rating__stars">
-            <span style={{ width: `${20 * Math.round(offer.starsCount)}%` }}></span>
+            <span style={{ width: `${20 * Math.round(offer.rating)}%` }}></span>
             <span className="visually-hidden">Rating</span>
           </div>
         </div>

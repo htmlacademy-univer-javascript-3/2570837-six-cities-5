@@ -1,13 +1,15 @@
 import { Helmet } from 'react-helmet-async';
 import Header from '../../components/header/header';
 import { useAppSelector } from '@hooks/index';
-import { memo, useMemo } from 'react';
 import { FavoritesList } from '@components/favorites-list/favorites-list.tsx';
+import { getFavoriteOffers, getFavoriteOffersCount } from '@store/user-info/selector';
+import { Link } from 'react-router-dom';
+import { AppRoute } from '@const';
 
 
-function FavoritesScreen(): JSX.Element {
-  const offers = useAppSelector((state) => state.offersList);
-  const favorites = useMemo(() => offers.filter((offer) => offer.isBookmarked), [offers]);
+export default function FavoritesScreen(): JSX.Element {
+  const favoriteOffers = useAppSelector(getFavoriteOffers);
+  const favoriteOffersCount = useAppSelector(getFavoriteOffersCount);
 
   return (
     <div className="page">
@@ -15,34 +17,31 @@ function FavoritesScreen(): JSX.Element {
         <title>Favorites</title>
       </Helmet>
       <Header />
-      <main className="page__main page__main--favorites">
+      <main className={`page__main page__main--favorites ${favoriteOffers.length === 0 ? 'page__main--favorites-empty' : ''}`}>
         <div className="page__favorites-container container">
-          {favorites.length === 0 ? (
+          {favoriteOffersCount > 0 ? (
+            <section className="favorites">
+              <h1 className="favorites__title">Saved listing</h1>
+              <FavoritesList offers={favoriteOffers} />
+            </section>
+          ) : (
             <section className="favorites favorites--empty">
               <h1 className="visually-hidden">Favorites (empty)</h1>
               <div className="favorites__status-wrapper">
                 <b className="favorites__status">Nothing yet saved.</b>
                 <p className="favorites__status-description">
-                  Save properties to narrow down search results.
+                  Save properties to narrow down search or plan your future trips.
                 </p>
               </div>
-            </section>
-          ) : (
-            <section className="favorites">
-              <h1 className="favorites__title">Saved listing</h1>
-              <FavoritesList offers={favorites} />
             </section>
           )}
         </div>
       </main>
       <footer className="footer container">
-        <a className="footer__logo-link" href="main.html">
+        <Link className="footer__logo-link" to={AppRoute.Root}>
           <img className="footer__logo" src="img/logo.svg" alt="6 cities logo" width="64" height="33" />
-        </a>
+        </Link>
       </footer>
     </div>
   );
 }
-
-const MemoizedFavoritesScreen = memo(FavoritesScreen);
-export default MemoizedFavoritesScreen;

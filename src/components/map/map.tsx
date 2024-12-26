@@ -1,67 +1,74 @@
-import { useRef, useEffect, useMemo, memo } from 'react';
-import { Icon, Marker, layerGroup } from 'leaflet';
-import useMap from '../../hooks/use-map';
-import { Offer, Offers } from '../../types/offer';
-import { DEFAULT_MARKER_ICON, CURRENT_MARKER_ICON } from '../../const';
+import { useRef, useEffect, memo } from 'react';
+import leaflet from 'leaflet';
+import useMap from '@hooks/use-map';
+import { Offers } from '../../types/offer';
+import { DEFAULT_MARKER_ICON, CURRENT_MARKER_ICON } from '@const';
 import 'leaflet/dist/leaflet.css';
 
 type MapProps = {
-  offers: Offers;
-  selectedOffer: Offer | undefined;
-  className: string;
+  points: Offers;
+  selectedPointId: string | null;
+  height: number;
 };
 
-const defaultMarkerIcon = new Icon({
+const defaultMarkerIcon = leaflet.icon({
   iconUrl: DEFAULT_MARKER_ICON,
   iconSize: [40, 40],
   iconAnchor: [20, 40]
 });
 
-const currentMarkerIcon = new Icon({
+const currentMarkerIcon = leaflet.icon({
   iconUrl: CURRENT_MARKER_ICON,
   iconSize: [40, 40],
   iconAnchor: [20, 40]
 });
 
-function Map({ offers, selectedOffer, className }: MapProps): JSX.Element {
+function Map({ points, selectedPointId, height }: MapProps): JSX.Element {
 
   const mapRef = useRef(null);
-  const map = useMap(mapRef, offers[0].city);
-
-  const markerLayer = useMemo(() => layerGroup(), []);
+  const map = useMap(mapRef, points[0].city);
 
   useEffect(() => {
     if (map) {
-      markerLayer.clearLayers();
-      offers.forEach((offer) => {
-        if (offer && offer.location) {
-          const marker = new Marker({
-            lat: offer.location.latitude,
-            lng: offer.location.longitude
-          });
-          marker
-            .setIcon(
-              selectedOffer !== undefined && offer.id === selectedOffer.id
-                ? currentMarkerIcon
-                : defaultMarkerIcon
-            )
-            .addTo(markerLayer);
+      map.eachLayer((layer) => {
+        if (layer instanceof leaflet.Marker) {
+          map.removeLayer(layer);
         }
       });
 
-      markerLayer.addTo(map);
-      return () => {
-        map.removeLayer(markerLayer);
-      };
-    }
-  }, [map, offers, selectedOffer]);
+      const bounds = leaflet.latLngBounds([]);
 
-  return <section className={className} style={{ height: '500px' }} ref={mapRef}></section>;
+      points.forEach((point) => {
+        const markerIcon = point.id === selectedPointId ? currentMarkerIcon : defaultMarkerIcon;
+
+        const marker = leaflet
+          .marker(
+            {
+              lat: point.location.latitude,
+              lng: point.location.longitude,
+            },
+            {
+              icon: markerIcon,
+            }
+          )
+          .addTo(map);
+        bounds.extend(marker.getLatLng());
+      });
+
+      if (points.length > 0) {
+        map.fitBounds(bounds, { padding: [50, 50] });
+      }
+    }
+  }, [map, points, selectedPointId]);
+
+
+  return (
+    <div
+      style={{ height: `${height}px` }}
+      ref={mapRef}
+    >
+    </div>
+  );
 }
 
-const MemoizedMap = memo(Map, (prevProps, nextProps) =>
-  prevProps.selectedOffer?.id === nextProps.selectedOffer?.id &&
-  prevProps.offers.map((offer) => offer.id).join() === nextProps.offers.map((offer) => offer.id).join()
-);
-
-export default MemoizedMap;
+export const MemoizedMap = memo(Map);

@@ -6,8 +6,8 @@ export type Review = {
       isPro: boolean;
       avatarUrl: string;
       };
-  text: string;
-  starsCount: number;
+  comment: string;
+  rating: number;
 };
 
 export type Reviews = Review[];

@@ -5,7 +5,7 @@ type ReviewItemProps = {
   review: Review;
 }
 
-function ReviewItem({ review }: ReviewItemProps): JSX.Element {
+function ReviewItemComponent({ review }: ReviewItemProps): JSX.Element {
   return (
     <li key={review.id} className="reviews__item">
       <div className="reviews__user user">
@@ -24,18 +24,20 @@ function ReviewItem({ review }: ReviewItemProps): JSX.Element {
       <div className="reviews__info">
         <div className="reviews__rating rating">
           <div className="reviews__stars rating__stars">
-            <span style={{ width: `${review.starsCount * 20}%` }}></span>
+            <span style={{ width: `${review.rating * 20}%` }}></span>
             <span className="visually-hidden">Rating</span>
           </div>
         </div>
-        <p className="reviews__text">{review.text}</p>
+        <p className="reviews__text">{review.comment}</p>
         <time className="reviews__time" dateTime={review.date}>
-          {new Date(review.date).toLocaleString('default', { month: 'long', year: 'numeric' })}
+          {new Date(review.date).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long'
+          })}
         </time>
       </div>
     </li>
   );
 }
 
-const MemoizedReviewItem = memo(ReviewItem);
-export default MemoizedReviewItem;
+export const ReviewItem = memo(ReviewItemComponent);
